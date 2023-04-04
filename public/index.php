@@ -1,2 +1,6 @@
 <?php
-echo 'Hello World!';
+phpinfo();
+
+$a = 10;
+
+var_dump($a);
