@@ -1,0 +1,14 @@
+{
+    "name": "vendor/softexpert",
+    "autoload": {
+        "psr-4": {
+            "Vendor\\Softexpert\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "gsfranzoni"
+        }
+    ],
+    "require": {}
+}
