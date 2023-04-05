@@ -2,7 +2,7 @@
     "name": "vendor/softexpert",
     "autoload": {
         "psr-4": {
-            "Vendor\\Softexpert\\": "src/"
+            "App\\": "src/"
         }
     },
     "authors": [
@@ -10,5 +10,12 @@
             "name": "gsfranzoni"
         }
     ],
-    "require": {}
+    "require": {
+        "slim/slim": "4.*",
+        "slim/psr7": "^1.6",
+        "doctrine/orm": "^2.14",
+        "doctrine/dbal": "^3.6",
+        "vlucas/phpdotenv": "^5.5",
+        "symfony/validator": "^6.2"
+    }
 }

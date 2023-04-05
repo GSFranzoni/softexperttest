@@ -1,6 +1,21 @@
 <?php
-phpinfo();
 
-$a = 10;
+use App\Http\Controller\HelloController;
+use Dotenv\Dotenv;
+use Slim\Factory\AppFactory;
 
-var_dump($a);
+require __DIR__ . '/../vendor/autoload.php';
+
+Dotenv::createImmutable(__DIR__ . '/..')->load();
+
+$app = AppFactory::create();
+
+$app->addBodyParsingMiddleware();
+
+$app->addRoutingMiddleware();
+
+$app->addErrorMiddleware(true, true, true);
+
+$app->get('/hello/{name}', [HelloController::class, 'hello']);
+
+$app->run();

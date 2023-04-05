@@ -17,3 +17,5 @@
 *.sublime-workspace
 *.komodoproject
 .komodotools/
+
+/.env
