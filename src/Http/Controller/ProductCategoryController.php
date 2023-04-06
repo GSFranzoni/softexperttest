@@ -85,8 +85,6 @@ class ProductCategoryController
             );
 
             $this->createProductCategoryService->execute($input);
-
-            return $response->withStatus(201);
         }
         catch (ValidationException $e) {
             $response->getBody()->write(json_encode([
@@ -95,5 +93,7 @@ class ProductCategoryController
             ]));
             return $response->withStatus(400);
         }
+
+        return $response->withStatus(201);
     }
 }
