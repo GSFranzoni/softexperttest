@@ -6,23 +6,22 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Id;
+use JsonSerializable;
 
 #[ORM\Entity]
 #[ORM\Table(name: "purchased_products")]
-class PurchasedProduct
+class PurchasedProduct implements JsonSerializable
 {
     #[Id]
     #[Column(name: "id", type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: "AUTO")]
     private int | null $id;
 
-    #[Column(name: "product_id", type: Product::class, nullable: false)]
     #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "products")]
     #[ORM\JoinColumn(name: "product_id", referencedColumnName: "id")]
     private Product $product;
 
-    #[Column(name: "purchase_id", type: "Purchase", nullable: false)]
-    #[ORM\ManyToOne(targetEntity: Purchase::class, inversedBy: "purchases")]
+    #[ORM\ManyToOne(targetEntity: Purchase::class, cascade: ["persist"], inversedBy: "purchases")]
     #[ORM\JoinColumn(name: "purchase_id", referencedColumnName: "id")]
     private Purchase $purchase;
 
@@ -129,5 +128,19 @@ class PurchasedProduct
     public function setTotal(int $total): void
     {
         $this->total = $total;
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            "id" => $this->id,
+            "product" => $this->product,
+            "quantity" => $this->quantity,
+            "price" => $this->price,
+            "total" => $this->total,
+        ];
     }
 }

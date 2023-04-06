@@ -6,7 +6,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Id;
-use JetBrains\PhpStorm\Pure;
 use JsonSerializable;
 
 #[ORM\Entity]
@@ -153,7 +152,7 @@ class Product implements JsonSerializable
     /**
      * @return array
      */
-    #[Pure] public function jsonSerialize(): array
+    public function jsonSerialize(): array
     {
         return [
             'id' => $this->id,

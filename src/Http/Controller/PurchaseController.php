@@ -9,6 +9,8 @@ use App\Persistence\Entity\Product;
 use App\Persistence\Entity\Purchase;
 use App\Persistence\EntityManager\EntityManagerFactory;
 use App\Persistence\Repository\ProductRepository;
+use App\Persistence\Repository\PurchasedProductRepository;
+use App\Persistence\Repository\PurchaseRepository;
 use App\Service\CreatePurchaseService;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityNotFoundException;
@@ -39,10 +41,41 @@ class PurchaseController
     private ProductRepository $productRepository;
 
     /**
+     * @var PurchaseRepository
+     */
+    private PurchaseRepository $purchaseRepository;
+
+    /**
+     * @var PurchasedProductRepository
+     */
+    private PurchasedProductRepository $purchasedProductRepository;
+
+    /**
      */
     public function __construct() { // Todo: Inject dependencies
         $this->productRepository = new ProductRepository();
-        $this->createPurchaseService = new CreatePurchaseService($this->productRepository);
+        $this->purchaseRepository = new PurchaseRepository();
+        $this->purchasedProductRepository = new PurchasedProductRepository();
+        $this->createPurchaseService = new CreatePurchaseService($this->productRepository, $this->purchasedProductRepository, $this->purchaseRepository);
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     * @return ResponseInterface
+     */
+    public function index(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+        $page = (int) ($request->getQueryParams()['page'] ?? 1);
+        $limit = (int) ($request->getQueryParams()['limit'] ?? 10);
+        $purchases = $this->purchaseRepository->getAll($page, $limit);
+        $total = $this->purchaseRepository->count();
+        $response->getBody()->write(json_encode([
+            'data' => $purchases,
+            'pages' => ceil($total / $limit),
+        ]));
+        return $response->withStatus(200);
     }
 
     /**

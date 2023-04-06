@@ -7,6 +7,8 @@ use App\Persistence\Entity\Product;
 use App\Persistence\Entity\Purchase;
 use App\Persistence\Entity\PurchasedProduct;
 use App\Persistence\Repository\ProductRepository;
+use App\Persistence\Repository\PurchasedProductRepository;
+use App\Persistence\Repository\PurchaseRepository;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -15,7 +17,9 @@ use Doctrine\ORM\TransactionRequiredException;
 class CreatePurchaseService
 {
     public function __construct(
-        private readonly ProductRepository $productRepository
+        private readonly ProductRepository $productRepository,
+        private readonly PurchasedProductRepository $purchasedProductRepository,
+        private readonly PurchaseRepository $purchaseRepository
     ) {
     }
 
@@ -30,6 +34,7 @@ class CreatePurchaseService
     public function execute(CreatePurchaseDTO $input): void
     {
         $purchase = new Purchase();
+        $this->purchaseRepository->save($purchase);
         foreach ($input->products as $purchasedProductDTO) {
             /** @var ?Product $product */
             $product = $this->productRepository->getById($purchasedProductDTO->productId);
@@ -48,7 +53,8 @@ class CreatePurchaseService
             $purchase->addProduct($purchasedProduct);
             $product->setStock($product->getStock() - $purchasedProductDTO->quantity);
             $purchase->setTotal($purchase->getTotal() + $product->getPrice() * $purchasedProductDTO->quantity);
+            $this->purchasedProductRepository->save($purchasedProduct);
         }
-        $this->productRepository->save($purchase);
+        $this->purchaseRepository->save($purchase);
     }
 }

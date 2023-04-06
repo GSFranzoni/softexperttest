@@ -7,20 +7,20 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use JetBrains\PhpStorm\Pure;
+use JsonSerializable;
 
 #[ORM\Embeddable]
 #[ORM\Table(name: "purchases")]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
-class Purchase // Todo: maybe rename to Order
+class Purchase implements JsonSerializable// Todo: maybe rename to Order
 {
     #[ORM\Id]
     #[ORM\Column(name: "id", type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: "AUTO")]
     private int | null $id;
 
-    #[ORM\OneToMany(mappedBy: "purchase", targetEntity: PurchasedProduct::class)]
+    #[ORM\OneToMany(mappedBy: "purchase", targetEntity: PurchasedProduct::class, cascade: ["persist", "remove"])]
     #[ORM\JoinColumn(name: "id", referencedColumnName: "purchase_id")]
     private Collection $products;
 
@@ -30,9 +30,11 @@ class Purchase // Todo: maybe rename to Order
     #[ORM\Column(name: "created_at", type: Types::DATETIME_IMMUTABLE, nullable: false)]
     private DateTimeImmutable $date;
 
-    #[Pure] public function __construct()
+    public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->total = 0.0;
+        $this->date = new DateTimeImmutable();
     }
 
     /**
@@ -106,5 +108,18 @@ class Purchase // Todo: maybe rename to Order
     public function setDate(DateTimeImmutable $date): void
     {
         $this->date = $date;
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'products' => $this->products->toArray(),
+            'total' => $this->total,
+            'date' => $this->date->format('Y-m-d H:i:s'),
+        ];
     }
 }

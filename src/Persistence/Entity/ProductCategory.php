@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\OneToMany;
-use JetBrains\PhpStorm\Pure;
 use JsonSerializable;
 
 #[ORM\Entity]
@@ -31,7 +30,7 @@ class ProductCategory implements JsonSerializable
     #[OneToMany(mappedBy: 'category', targetEntity: Product::class, cascade: ['persist', 'remove'])]
     private Collection $products;
 
-    #[Pure] public function __construct()
+    public function __construct()
     {
         $this->products = new ArrayCollection();
     }

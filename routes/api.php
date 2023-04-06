@@ -2,6 +2,7 @@
 
 use App\Http\Controller\ProductCategoryController;
 use App\Http\Controller\ProductController;
+use App\Http\Controller\PurchaseController;
 
 return function (Slim\Routing\RouteCollectorProxy $group) {
     $group->group('/products', function (Slim\Routing\RouteCollectorProxy $group) {
@@ -14,7 +15,7 @@ return function (Slim\Routing\RouteCollectorProxy $group) {
         });
     });
     $group->group('/purchases', function (Slim\Routing\RouteCollectorProxy $group) {
-        $group->get('', 'App\Http\Controller\PurchaseController:index');
-        $group->post('', 'App\Http\Controller\PurchaseController:store');
+        $group->get('', [PurchaseController::class, 'index']);
+        $group->post('', [PurchaseController::class, 'store']);
     });
 };
