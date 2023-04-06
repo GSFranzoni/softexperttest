@@ -30,7 +30,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   const { addToCart } = useContext(CartContext);
 
-  return <Card minW={250} boxShadow={'2xl'}>
+  return <Card width={'100%'} boxShadow={'2xl'}>
     <Image src={image} alt={name}/>
     <CardBody>
       <VStack alignItems={'start'}>

@@ -72,7 +72,7 @@ export default function MainLayout() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { showCartDrawer, onShowCartDrawer, onHideCartDrawer, itemsCount } = useContext(CartContext)
   return (
-    <Stack>
+    <Stack maxH={'100%'}>
       <CartDrawer/>
       <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
