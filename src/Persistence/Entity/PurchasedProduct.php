@@ -34,6 +34,9 @@ class PurchasedProduct implements JsonSerializable
     #[Column(name: "total", type: Types::DECIMAL, precision: 10, scale: 2, nullable: false)]
     private int $total;
 
+    #[Column(name: "tax", type: Types::DECIMAL, precision: 10, scale: 2, nullable: false)]
+    private float $tax;
+
     /**
      * @return int|null
      */
@@ -131,6 +134,22 @@ class PurchasedProduct implements JsonSerializable
     }
 
     /**
+     * @return float
+     */
+    public function getTax(): float
+    {
+        return $this->tax;
+    }
+
+    /**
+     * @param float $tax
+     */
+    public function setTax(float $tax): void
+    {
+        $this->tax = $tax;
+    }
+
+    /**
      * @return array
      */
     public function jsonSerialize(): array
@@ -141,6 +160,7 @@ class PurchasedProduct implements JsonSerializable
             "quantity" => $this->quantity,
             "price" => $this->price,
             "total" => $this->total,
+            "tax" => $this->tax
         ];
     }
 }

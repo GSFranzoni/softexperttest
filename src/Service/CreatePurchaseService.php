@@ -44,15 +44,19 @@ class CreatePurchaseService
             if ($product->getStock() < $purchasedProductDTO->quantity) {
                 throw new EntityNotFoundException("Product $purchasedProductDTO->productId has insufficient stock");
             }
+            $category = $product->getCategory();
+            $tax = $category->getTax();
             $purchasedProduct = new PurchasedProduct();
             $purchasedProduct->setProduct($product);
             $purchasedProduct->setPurchase($purchase);
             $purchasedProduct->setQuantity($purchasedProductDTO->quantity);
             $purchasedProduct->setPrice($product->getPrice());
             $purchasedProduct->setTotal($product->getPrice() * $purchasedProductDTO->quantity);
+            $purchasedProduct->setTax($product->getPrice() * $purchasedProductDTO->quantity * $tax->getPercent());
             $purchase->addProduct($purchasedProduct);
             $product->setStock($product->getStock() - $purchasedProductDTO->quantity);
             $purchase->setTotal($purchase->getTotal() + $product->getPrice() * $purchasedProductDTO->quantity);
+            $purchase->setTax($purchase->getTax() + $purchasedProduct->getTax());
             $this->purchasedProductRepository->save($purchasedProduct);
         }
         $this->purchaseRepository->save($purchase);

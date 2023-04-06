@@ -10,7 +10,7 @@ class CreateProductCategoryTaxDTO extends AbstractDTO
     #[NotBlank]
     public string $description;
 
-    #[Range(min: 0, max: 100)]
+    #[Range(min: 0, max: 1)]
     public float $percent;
 
     public function __construct(

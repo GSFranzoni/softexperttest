@@ -27,6 +27,9 @@ class Purchase implements JsonSerializable// Todo: maybe rename to Order
     #[ORM\Column(name: "total", type: Types::DECIMAL, precision: 10, scale: 2, nullable: false)]
     private float $total;
 
+    #[ORM\Column(name: "tax", type: Types::DECIMAL, precision: 10, scale: 2, nullable: false)]
+    private float $tax;
+
     #[ORM\Column(name: "created_at", type: Types::DATETIME_IMMUTABLE, nullable: false)]
     private DateTimeImmutable $date;
 
@@ -34,6 +37,7 @@ class Purchase implements JsonSerializable// Todo: maybe rename to Order
     {
         $this->products = new ArrayCollection();
         $this->total = 0.0;
+        $this->tax = 0.0;
         $this->date = new DateTimeImmutable();
     }
 
@@ -111,6 +115,22 @@ class Purchase implements JsonSerializable// Todo: maybe rename to Order
     }
 
     /**
+     * @return float
+     */
+    public function getTax(): float
+    {
+        return $this->tax;
+    }
+
+    /**
+     * @param float $tax
+     */
+    public function setTax(float $tax): void
+    {
+        $this->tax = $tax;
+    }
+
+    /**
      * @return array
      */
     public function jsonSerialize(): array
@@ -120,6 +140,7 @@ class Purchase implements JsonSerializable// Todo: maybe rename to Order
             'products' => $this->products->toArray(),
             'total' => $this->total,
             'date' => $this->date->format('Y-m-d H:i:s'),
+            'tax' => $this->tax
         ];
     }
 }
