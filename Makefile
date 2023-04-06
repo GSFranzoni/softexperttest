@@ -39,5 +39,8 @@ nginx: ## Start nginx bash
 mysql: ## Start mysql bash
 	docker-compose exec softexpert_mysql bash
 
+node: ## Start node bash
+	docker-compose exec softexpert_app sh
+
 exec: ## Start bash
 	docker-compose exec softexpert_server $(cmd)
