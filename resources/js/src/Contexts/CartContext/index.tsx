@@ -102,6 +102,7 @@ const CartProvider: React.FC<{
 
   const addToCart = useCallback((product: ProductCardProps) => {
     const productOnCard = productsInCart.find(p => p.id === product.id);
+    onShowCartDrawer();
     if (productOnCard) {
       return increaseQuantity({ id: product.id });
     }
