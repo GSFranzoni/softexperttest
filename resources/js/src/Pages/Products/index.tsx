@@ -1,7 +1,13 @@
 import React from "react";
+import ProductCard from "../../Components/ProductCard";
+import { Flex } from "@chakra-ui/react";
+import { CartContext } from "../../Contexts/CartContext";
 
 const ProductsPage: React.FC = () => {
-  return <h1>Products</h1>
+  const { products } = React.useContext(CartContext);
+  return <Flex gap={5}>
+    {products.map(product => <ProductCard key={product.id} {...product}/>)}
+  </Flex>
 }
 
 export default ProductsPage
