@@ -2,40 +2,31 @@
 
 namespace App\Http\Controller;
 
-use App\DataTransferObject\CreateProductCategoryDTO;
+use App\DataTransferObject\CreateProductCategoryTaxDTO;
 use App\Exception\ValidationException;
-use App\Persistence\Repository\ProductCategoryRepository;
 use App\Persistence\Repository\ProductCategoryTaxRepository;
-use App\Service\CreateProductCategoryService;
+use App\Service\CreateProductCategoryTaxService;
 use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\TransactionRequiredException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ProductCategoryController
+class ProductCategoryTaxController
 {
-    /**
-     * @var ProductCategoryRepository
-     */
-    private ProductCategoryRepository $repository;
-
-    /**
-     * @var CreateProductCategoryService
-     */
-    private CreateProductCategoryService $createProductCategoryService;
-
     /**
      * @var ProductCategoryTaxRepository
      */
-    private ProductCategoryTaxRepository $productCategoryTaxRepository;
+    private ProductCategoryTaxRepository $repository;
+
+    /**
+     * @var CreateProductCategoryTaxService
+     */
+    private CreateProductCategoryTaxService $createProductCategoryService;
 
     /**
      */
     public function __construct() { // Todo: Inject dependencies
-        $this->repository = new ProductCategoryRepository();
-        $this->productCategoryTaxRepository = new ProductCategoryTaxRepository();
-        $this->createProductCategoryService = new CreateProductCategoryService($this->repository, $this->productCategoryTaxRepository);
+        $this->repository = new ProductCategoryTaxRepository();
+        $this->createProductCategoryService = new CreateProductCategoryTaxService($this->repository);
     }
 
     /**
@@ -48,29 +39,12 @@ class ProductCategoryController
     {
         $page = (int) ($request->getQueryParams()['page'] ?? 1);
         $limit = (int) ($request->getQueryParams()['limit'] ?? 10);
-        $categories = $this->repository->getAll($page, $limit);
+        $taxes = $this->repository->getAll($page, $limit);
         $total = $this->repository->count();
         $response->getBody()->write(json_encode([
-            'data' => $categories,
+            'data' => $taxes,
             'pages' => ceil($total / $limit),
         ]));
-        return $response->withStatus(200);
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $args
-     * @return ResponseInterface
-     * @throws ORMException
-     * @throws OptimisticLockException
-     * @throws TransactionRequiredException
-     */
-    public function show(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-    {
-        $id = (int) $args['id'];
-        $product = $this->repository->getById($id);
-        $response->getBody()->write(json_encode($product));
         return $response->withStatus(200);
     }
 
@@ -86,9 +60,9 @@ class ProductCategoryController
         try {
             $data = $request->getParsedBody();
 
-            $input = new CreateProductCategoryDTO(
+            $input = new CreateProductCategoryTaxDTO(
                 description: $data['description'] ?? '',
-                taxId: $data['taxId'] ?? 0,
+                percent: $data['percent'] ?? 0,
             );
 
             $this->createProductCategoryService->execute($input);

@@ -3,21 +3,22 @@
 namespace App\DataTransferObject;
 
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Range;
 
-class CreateProductCategoryDTO extends AbstractDTO
+class CreateProductCategoryTaxDTO extends AbstractDTO
 {
     #[NotBlank]
     public string $description;
 
-    #[NotBlank]
-    public float $taxId;
+    #[Range(min: 0, max: 100)]
+    public float $percent;
 
     public function __construct(
         string $description,
-        float $taxId
+        float $percent
     ) {
         $this->description = $description;
-        $this->taxId = $taxId;
+        $this->percent = $percent;
         
         parent::__construct();
     }

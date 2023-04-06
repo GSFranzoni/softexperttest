@@ -24,8 +24,9 @@ class ProductCategory implements JsonSerializable
     #[Column(name: 'description', type: Types::STRING, length: 255, nullable: false)]
     private string $description;
 
-    #[Column(name: 'tax', type: Types::DECIMAL, precision: 10, scale: 2, nullable: false)]
-    private float $tax;
+    #[ORM\ManyToOne(targetEntity: ProductCategoryTax::class)]
+    #[ORM\JoinColumn(name: 'tax_id', referencedColumnName: 'id')]
+    private ProductCategoryTax $tax;
 
     #[OneToMany(mappedBy: 'category', targetEntity: Product::class, cascade: ['persist', 'remove'])]
     private Collection $products;
@@ -68,17 +69,17 @@ class ProductCategory implements JsonSerializable
     }
 
     /**
-     * @return float
+     * @return ProductCategoryTax
      */
-    public function getTax(): float
+    public function getTax(): ProductCategoryTax
     {
         return $this->tax;
     }
 
     /**
-     * @param float $tax
+     * @param ProductCategoryTax $tax
      */
-    public function setTax(float $tax): void
+    public function setTax(ProductCategoryTax $tax): void
     {
         $this->tax = $tax;
     }
