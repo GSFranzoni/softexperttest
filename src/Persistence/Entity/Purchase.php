@@ -1,49 +1,37 @@
 <?php
 
-namespace App\Data\Entity;
+namespace App\Persistence\Entity;
 
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
-/**
- * @ORM\Embeddable
- * @ORM\Table(name="purchases")
- * @ORM\Entity(repositoryClass="App\Data\Repository\PurchaseRepository")
- * @ORM\HasLifecycleCallbacks
- * @ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")
- * @ORM\InheritanceType("SINGLE_TABLE")
- */
+#[ORM\Embeddable]
+#[ORM\Table(name: "purchases")]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class Purchase
 {
-    /** @var ?int */
     #[ORM\Id]
-    #[ORM\Column(name: "id", type: "integer")]
-    #[ORM\GeneratedValue(strategy: "IDENTITY")]
+    #[ORM\Column(name: "id", type: Types::INTEGER)]
     private int | null $id;
 
-    /** @var Collection<int, Product> */
-    #[ORM\OneToMany(mappedBy: "purchase", targetEntity: "PurchasedProduct")]
+    #[ORM\OneToMany(mappedBy: "purchase", targetEntity: PurchasedProduct::class)]
+    #[ORM\JoinColumn(name: "id", referencedColumnName: "purchase_id")]
     private Collection $products;
 
-    /** @var float */
-    #[ORM\Column(name: "total", type: "float", nullable: false)]
+    #[ORM\Column(name: "total", type: Types::DECIMAL, precision: 10, scale: 2, nullable: false)]
     private float $total;
 
-    /** @var DateTimeImmutable */
-    #[ORM\Column(name: "date", type: "string", length: 255, nullable: false)]
+    #[ORM\Column(name: "created_at", type: Types::DATETIME_IMMUTABLE, nullable: false)]
     private DateTimeImmutable $date;
 
-    /**
-     * @param Collection $products
-     * @param float $total
-     * @param DateTimeImmutable $date
-     */
-    public function __construct(Collection $products, float $total, DateTimeImmutable $date)
+    #[Pure] public function __construct()
     {
-        $this->products = $products;
-        $this->total = $total;
-        $this->date = $date;
+        $this->products = new ArrayCollection();
     }
 
     /**

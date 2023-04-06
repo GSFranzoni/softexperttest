@@ -2,17 +2,15 @@
 
 namespace App\Service;
 
-use App\Data\Entity\Product;
-use App\Data\Entity\ProductCategory;
 use App\DataTransferObject\CreateProductDTO;
-use App\Exception\InvalidDataProvided;
+use App\Persistence\Entity\Product;
+use App\Persistence\Entity\ProductCategory;
 use App\Persistence\Repository\ProductCategoryRepository;
 use App\Persistence\Repository\ProductRepository;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\TransactionRequiredException;
-use InvalidArgumentException;
 
 class CreateProductService
 {
@@ -37,14 +35,13 @@ class CreateProductService
         if (is_null($category)) {
             throw new EntityNotFoundException("Category not found");
         }
-        $product = new Product(
-            name: $input->name,
-            description: $input->description,
-            price: $input->price,
-            stock: $input->stock,
-            image: '',
-            category: $category,
-        );
+        $product = new Product();
+        $product->setName($input->name);
+        $product->setPrice($input->price);
+        $product->setCategory($category);
+        $product->setDescription($input->description);
+        $product->setStock($input->stock);
+        $product->setImage('');
         $this->productRepository->save($product);
     }
 }

@@ -1,21 +1,24 @@
 <?php
 
-namespace App\Data\EntityManager;
+namespace App\Persistence\EntityManager;
 
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\ORMSetup;
 use Doctrine\ORM\Tools\Setup;
 
 class EntityManagerFactory
 {
     /**
-     * @var EntityManager
+     * @var ?EntityManager
      */
-    private static EntityManager $entityManager;
+    private static ?EntityManager $entityManager = null;
 
     /**
      * @return EntityManager
      * @throws ORMException
+     * @throws Exception
      */
     public static function getEntityManager(): EntityManager
     {
@@ -25,20 +28,10 @@ class EntityManagerFactory
 
         $entityDir = __DIR__ . "/Entity";
 
-        $connection = [
-            'dbname' => getenv('MYSQL_DATABASE'),
-            'user' => getenv('MYSQL_DATABASE'),
-            'password' => getenv('MYSQL_PASSWORD'),
-            'host' => getenv('MYSQL_HOST'),
-            'driver' => 'pdo_mysql',
-        ];
+        $connection = require_once __DIR__ . "/../../../database/connection/connection.php";
 
-        $config = Setup::createAnnotationMetadataConfiguration(
-            [$entityDir], getenv('ENVIRONMENT') === 'development'
-        );
+        $config = ORMSetup::createAttributeMetadataConfiguration([$entityDir], true);
 
-        self::$entityManager = EntityManager::create($connection, $config);
-
-        return self::$entityManager;
+        return self::$entityManager = EntityManager::create($connection, $config);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Persistence\Repository;
 
-use App\Data\Entity\Product;
+use App\Persistence\Entity\Product;
 
 class ProductRepository extends AbstractRepository
 {

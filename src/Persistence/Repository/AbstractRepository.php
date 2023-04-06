@@ -2,7 +2,8 @@
 
 namespace App\Persistence\Repository;
 
-use App\Data\EntityManager\EntityManagerFactory;
+use App\Persistence\EntityManager\EntityManagerFactory;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -17,15 +18,21 @@ abstract class AbstractRepository
 
     /**
      * @throws ORMException
+     * @throws Exception
      */
     public function __construct()
     {
         $this->entityManager = EntityManagerFactory::getEntityManager();
     }
 
-    public function getAll(): array
+    /**
+     * @param int $page
+     * @param int $limit
+     * @return array
+     */
+    public function getAll(int $page = 1, int $limit = 10): array
     {
-        return $this->entityManager->getRepository($this->getEntityClass())->findAll();
+        return $this->entityManager->getRepository($this->getEntityClass())->findBy([], [], $limit, ($page - 1) * $limit);
     }
 
     /**
@@ -56,6 +63,14 @@ abstract class AbstractRepository
     {
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
+    }
+
+    /**
+     * @return int
+     */
+    public function count(): int
+    {
+        return $this->entityManager->getRepository($this->getEntityClass())->count([]);
     }
 
     protected abstract function getEntityClass(): string;

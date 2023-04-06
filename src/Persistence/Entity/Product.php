@@ -1,76 +1,38 @@
 <?php
 
-namespace App\Data\Entity;
+namespace App\Persistence\Entity;
 
-/*
- * @Table(name="products")
- * @HasLifecycleCallbacks
- * @Entity(repositoryClass="App\Data\Repository\ProductRepository")
-*/
-
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 
-/**
- * @ORM\Embeddable
- */
+#[ORM\Entity]
+#[ORM\Table(name: "products")]
 class Product
 {
-    /**  @var ?int */
     #[Id]
-    #[Column(name: "id", type: "integer")]
-    #[GeneratedValue(strategy: "IDENTITY")]
+    #[Column(name: "id", type: Types::INTEGER)]
     private int | null $id;
 
-    /** @var string */
-    #[Column(name: "name", type: "string", length: 255, nullable: false)]
+    #[Column(name: "name", type: Types::STRING, length: 255, nullable: false)]
     private string $name;
 
-    /** @var string */
-    #[Column(name: "description", type: "string", length: 255, nullable: false)]
+    #[Column(name: "description", type: Types::STRING, length: 255, nullable: false)]
     private string $description;
 
-    /** @var float */
-    #[Column(name: "price", type: "float", nullable: false)]
+    #[Column(name: "price", type: Types::DECIMAL, precision: 10, scale: 2, nullable: false)]
     private float $price;
 
-    /** @var int */
-    #[Column(name: "stock", type: "integer", nullable: false)]
+    #[Column(name: "stock", type: Types::INTEGER, nullable: false)]
     private int $stock;
 
-    /** @var string */
-    #[Column(name: "image", type: "string", length: 255, nullable: false)]
+    #[Column(name: "image", type: Types::STRING, length: 255, nullable: false)]
     private string $image;
 
-    /** @var ProductCategory */
-    #[Column(name: "category", type: "ProductCategory", nullable: false)]
+    #[ORM\ManyToOne(targetEntity: ProductCategory::class, inversedBy: "products")]
+    #[ORM\JoinColumn(name: "category_id", referencedColumnName: "id")]
     private ProductCategory $category;
-
-    /**
-     * @param string $name
-     * @param string $description
-     * @param float $price
-     * @param int $stock
-     * @param string $image
-     * @param ProductCategory $category
-     */
-    public function __construct(
-        string $name,
-        string $description,
-        float $price,
-        int $stock,
-        string $image,
-        ProductCategory $category
-    ) {
-        $this->name = $name;
-        $this->description = $description;
-        $this->price = $price;
-        $this->stock = $stock;
-        $this->image = $image;
-        $this->category = $category;
-    }
 
     /**
      * @return int|null

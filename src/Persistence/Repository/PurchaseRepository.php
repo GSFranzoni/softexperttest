@@ -2,7 +2,7 @@
 
 namespace App\Persistence\Repository;
 
-use App\Data\Entity\Purchase;
+use App\Persistence\Entity\Purchase;
 
 class PurchaseRepository extends AbstractRepository
 {

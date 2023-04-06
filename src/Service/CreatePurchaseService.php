@@ -2,28 +2,20 @@
 
 namespace App\Service;
 
-use App\Data\Entity\Product;
-use App\Data\Entity\ProductCategory;
-use App\Data\Entity\Purchase;
-use App\Data\Entity\PurchasedProduct;
-use App\DataTransferObject\CreateProductDTO;
 use App\DataTransferObject\CreatePurchaseDTO;
-use App\Persistence\Repository\ProductCategoryRepository;
+use App\Persistence\Entity\Product;
+use App\Persistence\Entity\Purchase;
+use App\Persistence\Entity\PurchasedProduct;
 use App\Persistence\Repository\ProductRepository;
-use DateTime;
-use DateTimeImmutable;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\TransactionRequiredException;
-use Symfony\Component\Validator\Constraints\Collection;
 
 class CreatePurchaseService
 {
     public function __construct(
-        private readonly ProductRepository $productRepository,
-        private readonly ProductCategoryRepository $productCategoryRepository
+        private readonly ProductRepository $productRepository
     ) {
     }
 
@@ -37,11 +29,7 @@ class CreatePurchaseService
      */
     public function execute(CreatePurchaseDTO $input): void
     {
-        $purchase = new Purchase(
-            products: new ArrayCollection([]),
-            total: 0,
-            date: new DateTimeImmutable()
-        );
+        $purchase = new Purchase();
         foreach ($input->products as $purchasedProductDTO) {
             /** @var ?Product $product */
             $product = $this->productRepository->getById($purchasedProductDTO->productId);
@@ -51,12 +39,13 @@ class CreatePurchaseService
             if ($product->getStock() < $purchasedProductDTO->quantity) {
                 throw new EntityNotFoundException("Product $purchasedProductDTO->productId has insufficient stock");
             }
-            $purchaseProduct = new PurchasedProduct(
-                product: $product,
-                quantity: $purchasedProductDTO->quantity,
-                purchase: $purchase,
-            );
-            $purchase->addProduct($purchaseProduct);
+            $purchasedProduct = new PurchasedProduct();
+            $purchasedProduct->setProduct($product);
+            $purchasedProduct->setPurchase($purchase);
+            $purchasedProduct->setQuantity($purchasedProductDTO->quantity);
+            $purchasedProduct->setPrice($product->getPrice());
+            $purchasedProduct->setTotal($product->getPrice() * $purchasedProductDTO->quantity);
+            $purchase->addProduct($purchasedProduct);
             $product->setStock($product->getStock() - $purchasedProductDTO->quantity);
             $purchase->setTotal($purchase->getTotal() + $product->getPrice() * $purchasedProductDTO->quantity);
         }

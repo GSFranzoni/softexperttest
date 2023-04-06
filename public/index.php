@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controller\HelloController;
-use Dotenv\Dotenv;
 use Slim\Factory\AppFactory;
+use Symfony\Component\Dotenv\Dotenv;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-Dotenv::createImmutable(__DIR__ . '/..')->load();
+$dotenv = new Dotenv();
+
+$dotenv->load(__DIR__ . '/../.env');
 
 $app = AppFactory::create();
 
@@ -16,6 +18,8 @@ $app->addRoutingMiddleware();
 
 $app->addErrorMiddleware(true, true, true);
 
-$app->get('/hello/{name}', [HelloController::class, 'hello']);
+$api = require __DIR__ . '/../routes/api.php';
+
+$app->group('/api', fn (Slim\Routing\RouteCollectorProxy $group) => $api($group));
 
 $app->run();

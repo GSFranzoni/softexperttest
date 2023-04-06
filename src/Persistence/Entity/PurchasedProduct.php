@@ -1,52 +1,38 @@
 <?php
 
-namespace App\Data\Entity;
+namespace App\Persistence\Entity;
 
-/*
- * @Table(name="products")
- * @HasLifecycleCallbacks
- * @Entity(repositoryClass="App\Data\Repository\ProductRepository")
-*/
-
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 
-/**
- * @ORM\Embeddable
- */
+#[ORM\Entity]
+#[ORM\Table(name: "purchased_products")]
 class PurchasedProduct
 {
-    /** @var ?int */
     #[Id]
-    #[Column(name: "id", type: "integer")]
-    #[GeneratedValue(strategy: "IDENTITY")]
+    #[Column(name: "id", type: Types::INTEGER)]
     private int | null $id;
 
-    /** @var Product */
-    #[Column(name: "product", type: "Product", nullable: false)]
+    #[Column(name: "product_id", type: Product::class, nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "products")]
+    #[ORM\JoinColumn(name: "product_id", referencedColumnName: "id")]
     private Product $product;
 
-    /** @var int */
-    #[Column(name: "quantity", type: "integer", nullable: false)]
-    private int $quantity;
-
-    /** @var Purchase */
-    #[Column(name: "purchase", type: "Purchase", nullable: false)]
+    #[Column(name: "purchase_id", type: "Purchase", nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Purchase::class, inversedBy: "purchases")]
+    #[ORM\JoinColumn(name: "purchase_id", referencedColumnName: "id")]
     private Purchase $purchase;
 
-    /**
-     * @param Product $product
-     * @param int $quantity
-     * @param Purchase $purchase
-     */
-    public function __construct(Product $product, int $quantity, Purchase $purchase)
-    {
-        $this->product = $product;
-        $this->quantity = $quantity;
-        $this->purchase = $purchase;
-    }
+    #[Column(name: "quantity", type: Types::INTEGER, nullable: false)]
+    private int $quantity;
+
+    #[Column(name: "price", type: Types::DECIMAL, precision: 10, scale: 2, nullable: false)]
+    private int $price;
+
+    #[Column(name: "total", type: Types::DECIMAL, precision: 10, scale: 2, nullable: false)]
+    private int $total;
 
     /**
      * @return int|null
@@ -81,6 +67,22 @@ class PurchasedProduct
     }
 
     /**
+     * @return Purchase
+     */
+    public function getPurchase(): Purchase
+    {
+        return $this->purchase;
+    }
+
+    /**
+     * @param Purchase $purchase
+     */
+    public function setPurchase(Purchase $purchase): void
+    {
+        $this->purchase = $purchase;
+    }
+
+    /**
      * @return int
      */
     public function getQuantity(): int
@@ -97,18 +99,34 @@ class PurchasedProduct
     }
 
     /**
-     * @return Purchase
+     * @return int
      */
-    public function getPurchase(): Purchase
+    public function getPrice(): int
     {
-        return $this->purchase;
+        return $this->price;
     }
 
     /**
-     * @param Purchase $purchase
+     * @param int $price
      */
-    public function setPurchase(Purchase $purchase): void
+    public function setPrice(int $price): void
     {
-        $this->purchase = $purchase;
+        $this->price = $price;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotal(): int
+    {
+        return $this->total;
+    }
+
+    /**
+     * @param int $total
+     */
+    public function setTotal(int $total): void
+    {
+        $this->total = $total;
     }
 }

@@ -15,7 +15,10 @@
         "slim/psr7": "^1.6",
         "doctrine/orm": "^2.14",
         "doctrine/dbal": "^3.6",
-        "vlucas/phpdotenv": "^5.5",
-        "symfony/validator": "^6.2"
+        "symfony/validator": "^6.2",
+        "doctrine/migrations": "^3.6",
+        "symfony/dotenv": "^6.2",
+        "symfony/cache": "^6.2",
+        "doctrine/annotations": "1.14"
     }
 }

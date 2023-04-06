@@ -2,9 +2,8 @@
 
 namespace App\Service;
 
-use App\Data\Entity\ProductCategory;
+use App\Persistence\Entity\ProductCategory;
 use App\DataTransferObject\CreateProductCategoryDTO;
-use App\Exception\ValidationException;
 use App\Persistence\Repository\ProductCategoryRepository;
 use Doctrine\ORM\Exception\ORMException;
 
@@ -22,10 +21,9 @@ class CreateProductCategoryService
      */
     public function execute(CreateProductCategoryDTO $input): void
     {
-        $category = new ProductCategory(
-            description: $input->description,
-            tax: $input->tax,
-        );
+        $category = new ProductCategory();
+        $category->setDescription($input->description);
+        $category->setTax($input->tax);
         $this->productCategoryRepository->save($category);
     }
 }

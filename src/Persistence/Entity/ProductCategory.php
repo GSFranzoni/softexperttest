@@ -1,39 +1,39 @@
 <?php
 
-namespace App\Data\Entity;
+namespace App\Persistence\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\OneToMany;
+use JetBrains\PhpStorm\Pure;
+use JsonSerializable;
 
-/**
- * @ORM\Embeddable
- */
-class ProductCategory
+#[ORM\Entity]
+#[ORM\Table(name: 'products_category')]
+class ProductCategory implements JsonSerializable
 {
-    /** @var ?int */
     #[Id]
     #[Column(name: 'id', type: 'integer')]
     #[GeneratedValue(strategy: 'IDENTITY')]
     private int | null $id;
 
-    /** @var string */
-    #[Column(name: 'description', type: 'string', length: 255, nullable: false)]
+    #[Column(name: 'description', type: Types::STRING, length: 255, nullable: false)]
     private string $description;
 
-    /** @var float */
-    #[Column(name: 'tax', type: 'float', nullable: false)]
+    #[Column(name: 'tax', type: Types::DECIMAL, precision: 10, scale: 2, nullable: false)]
     private float $tax;
 
-    /**
-     * @param string $description
-     * @param float $tax
-     */
-    public function __construct(string $description, float $tax)
+    #[OneToMany(mappedBy: 'category', targetEntity: Product::class, cascade: ['persist', 'remove'])]
+    private Collection $products;
+
+    #[Pure] public function __construct()
     {
-        $this->description = $description;
-        $this->tax = $tax;
+        $this->products = new ArrayCollection();
     }
 
     /**
@@ -82,5 +82,41 @@ class ProductCategory
     public function setTax(float $tax): void
     {
         $this->tax = $tax;
+    }
+
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getProducts(): ArrayCollection|Collection
+    {
+        return $this->products;
+    }
+
+    /**
+     * @param ArrayCollection|Collection $products
+     */
+    public function setProducts(ArrayCollection|Collection $products): void
+    {
+        $this->products = $products;
+    }
+
+    /**
+     * @param Product $product
+     */
+    public function addProduct(Product $product): void
+    {
+        $this->products->add($product);
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'description' => $this->description,
+            'tax' => $this->tax
+        ];
     }
 }
