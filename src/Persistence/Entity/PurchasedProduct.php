@@ -13,6 +13,7 @@ class PurchasedProduct
 {
     #[Id]
     #[Column(name: "id", type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
     private int | null $id;
 
     #[Column(name: "product_id", type: Product::class, nullable: false)]

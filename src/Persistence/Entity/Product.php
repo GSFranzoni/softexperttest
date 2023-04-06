@@ -6,13 +6,16 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Id;
+use JetBrains\PhpStorm\Pure;
+use JsonSerializable;
 
 #[ORM\Entity]
 #[ORM\Table(name: "products")]
-class Product
+class Product implements JsonSerializable
 {
     #[Id]
     #[Column(name: "id", type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
     private int | null $id;
 
     #[Column(name: "name", type: Types::STRING, length: 255, nullable: false)]
@@ -144,5 +147,22 @@ class Product
     public function setCategory(ProductCategory $category): void
     {
         $this->category = $category;
+    }
+
+
+    /**
+     * @return array
+     */
+    #[Pure] public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'price' => $this->price,
+            'stock' => $this->stock,
+            'image' => $this->image,
+            'category' => $this->category
+        ];
     }
 }

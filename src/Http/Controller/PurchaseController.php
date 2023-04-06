@@ -19,11 +19,15 @@ use Doctrine\ORM\TransactionRequiredException;
 use Doctrine\Persistence\ObjectRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\ValidatorBuilder;
 use Throwable;
 
 class PurchaseController
 {
-
     /**
      * @var CreatePurchaseService
      */
@@ -46,10 +50,6 @@ class PurchaseController
      * @param ResponseInterface $response
      * @param array $args
      * @return ResponseInterface
-     * @throws ORMException
-     * @throws EntityNotFoundException
-     * @throws OptimisticLockException
-     * @throws TransactionRequiredException
      */
     public function store(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
@@ -58,10 +58,10 @@ class PurchaseController
         try {
             $products = [];
 
-            foreach ($body['products'] as $product) {
+            foreach ($body['products'] ?? [] as $product) {
                 $products[] = new CreatePurchasedProductDTO(
-                    productId: $product['productId'],
-                    quantity: $product['quantity'],
+                    productId: $product['productId'] ?? null,
+                    quantity: $product['quantity'] ?? null,
                 );
             }
 
@@ -76,9 +76,9 @@ class PurchaseController
             ]));
             return $response->withStatus(400);
         }
-        catch (Throwable $e) {
+        catch (Throwable $e) { // Todo: create error handler middleware
             $response->getBody()->write(json_encode([
-                'message' => 'Internal server error',
+                'message' => $e->getMessage(),
             ]));
             return $response->withStatus(500);
         }

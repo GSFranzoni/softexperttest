@@ -19,7 +19,7 @@ class ProductCategory implements JsonSerializable
 {
     #[Id]
     #[Column(name: 'id', type: 'integer')]
-    #[GeneratedValue(strategy: 'IDENTITY')]
+    #[GeneratedValue(strategy: 'AUTO')]
     private int | null $id;
 
     #[Column(name: 'description', type: Types::STRING, length: 255, nullable: false)]

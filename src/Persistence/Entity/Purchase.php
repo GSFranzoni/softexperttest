@@ -13,10 +13,11 @@ use JetBrains\PhpStorm\Pure;
 #[ORM\Table(name: "purchases")]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
-class Purchase
+class Purchase // Todo: maybe rename to Order
 {
     #[ORM\Id]
     #[ORM\Column(name: "id", type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
     private int | null $id;
 
     #[ORM\OneToMany(mappedBy: "purchase", targetEntity: PurchasedProduct::class)]
