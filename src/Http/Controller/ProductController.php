@@ -4,15 +4,9 @@ namespace App\Http\Controller;
 
 use App\DataTransferObject\CreateProductDTO;
 use App\Exception\ValidationException;
-use App\Persistence\Entity\Product;
-use App\Persistence\EntityManager\EntityManagerFactory;
 use App\Persistence\Repository\ProductCategoryRepository;
 use App\Persistence\Repository\ProductRepository;
-use App\Service\CreateProductCategoryService;
 use App\Service\CreateProductService;
-use Doctrine\DBAL\Exception;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Exception\ORMException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 

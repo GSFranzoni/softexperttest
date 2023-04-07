@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controller\HelloController;
 use Slim\Factory\AppFactory;
 use Symfony\Component\Dotenv\Dotenv;
 
@@ -20,6 +19,10 @@ $app->addErrorMiddleware(true, true, true);
 
 $api = require __DIR__ . '/../routes/api.php';
 
-$app->group('/api', fn (Slim\Routing\RouteCollectorProxy $group) => $api($group));
+$cors = require __DIR__ . '/../bootstrap/cors/index.php';
+
+$cors($app);
+
+$app->group('/api', fn(Slim\Routing\RouteCollectorProxy $group) => $api($group));
 
 $app->run();

@@ -1,6 +1,7 @@
 import { ProductCardProps } from "../../Components/ProductCard";
-import React, { createContext, useCallback } from "react";
+import React, { createContext, useCallback, useEffect } from "react";
 import { useDisclosure } from "@chakra-ui/react";
+import { getProducts } from "../../Services/Products";
 
 const fakeProducts: ProductCardProps[] = [
   {
@@ -123,6 +124,10 @@ const CartProvider: React.FC<{
   const removeFromCart = (product: ProductCardProps) => {
     setProductsInCart(productsInCart.filter(p => p.id !== product.id));
   };
+
+  useEffect(() => {
+    getProducts({}).then(console.log);
+  }, []);
 
   return (
     <CartContext.Provider value={{
