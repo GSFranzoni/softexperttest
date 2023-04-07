@@ -2,6 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import ProductList from "./Pages/ProductList";
 import MainLayout from "./Layouts/Main";
 import ProductCreatePage from "./Pages/ProductCreate";
+import CategoryList from "./Pages/CategoryList";
+import CategoryCreatePage from "./Pages/CategoryCreate";
 
 const router = createBrowserRouter([
   {
@@ -23,7 +25,16 @@ const router = createBrowserRouter([
       },
       {
         path: '/categories',
-        element: null,
+        children: [
+          {
+            path: '',
+            element: <CategoryList/>,
+          },
+          {
+            path: 'create',
+            element: <CategoryCreatePage/>,
+          }
+        ]
       },
       {
         path: '/taxes',
