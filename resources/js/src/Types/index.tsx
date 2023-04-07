@@ -31,3 +31,5 @@ export type Purchase = {
   tax: number;
   date: string;
 }
+
+export type CreatePurchase = Pick<Purchase, 'products'>;

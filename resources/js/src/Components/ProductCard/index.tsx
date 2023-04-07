@@ -31,7 +31,7 @@ const ProductCard: React.FC<Product> = ({
           'gray.500'
         }>{description}</Text>
         <HStack py={2} alignItems={'center'}>
-          <Text fontSize={'4xl'} fontWeight={'bold'} color={
+          <Text fontSize={'3xl'} fontWeight={'bold'} color={
             inStock ? 'whatsapp.300' : 'red.100'
           }>{formattedPrice}</Text>
           <Text fontSize={'xs'} color={'gray.500'}>+ {formattedTax} tax</Text>

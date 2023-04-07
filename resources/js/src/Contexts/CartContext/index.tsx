@@ -1,16 +1,13 @@
 import React, { createContext, useCallback } from "react";
-import { useDisclosure } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
+import { useDisclosure, useToast } from "@chakra-ui/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getProducts } from "../../Services/Products";
-import { Product } from "../../Types";
-
-export type ProductOnCard = Product & {
-  quantity: number;
-}
+import { Product, PurchasedProduct } from "../../Types";
+import { createPurchase } from "../../Services/Purchases";
 
 type CartContextData = {
   products: Product[];
-  productsInCart: ProductOnCard[];
+  productsInCart: PurchasedProduct[];
   addToCart: (product: Product) => void;
   removeFromCart: (product: Product) => void;
   increaseQuantity: (product: Product) => void;
@@ -23,6 +20,8 @@ type CartContextData = {
   onHideCartDrawer: () => void;
   isEmpty: boolean;
   isFetching: boolean;
+  savePurchase: () => void;
+  isCreatingPurchase: boolean;
 }
 
 export const CartContext = createContext<CartContextData>({} as CartContextData);
@@ -38,7 +37,7 @@ const CartProvider: React.FC<{
     }
   });
 
-  const [ productsInCart, setProductsInCart ] = React.useState<ProductOnCard[]>([]);
+  const [ productsInCart, setProductsInCart ] = React.useState<PurchasedProduct[]>([]);
 
   const total = React.useMemo(() => {
     return productsInCart.reduce((acc, product) => acc + product.price * product.quantity, 0);
@@ -101,6 +100,37 @@ const CartProvider: React.FC<{
     setProductsInCart(productsInCart.filter(p => p.id !== product.id));
   };
 
+  const queryClient = useQueryClient();
+
+  const toast = useToast();
+
+  const { mutateAsync: savePurchase, isLoading: isCreatingPurchase } = useMutation(() => createPurchase({
+    products: productsInCart
+  }), {
+    onSuccess: async () => {
+      setProductsInCart([]);
+      onHideCartDrawer();
+      await queryClient.invalidateQueries([ 'purchases' ]);
+      await queryClient.invalidateQueries([ 'products' ]);
+      toast({
+        title: "Purchase created",
+        description: "Your purchase was created successfully",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "An error occurred while creating your purchase",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  });
+
   return (
     <CartContext.Provider value={{
       products,
@@ -117,6 +147,8 @@ const CartProvider: React.FC<{
       itemsCount,
       isEmpty,
       isFetching,
+      savePurchase,
+      isCreatingPurchase,
     }}>
       {children}
     </CartContext.Provider>

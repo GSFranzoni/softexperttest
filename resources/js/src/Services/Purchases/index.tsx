@@ -1,4 +1,4 @@
-import { Purchase } from "../../Types";
+import { CreatePurchase, Purchase } from "../../Types";
 import axios from "axios";
 
 type PaginatedResponse<T> = {
@@ -10,8 +10,6 @@ export const getPurchases = async () => axios.get<PaginatedResponse<Purchase>>('
   .then((response) => response.data.data)
   .catch((error) => ([]));
 
-export const createPurchase = async (purchase: Purchase) => axios.post('purchases', {
-  products: purchase.products
-})
+export const createPurchase = async (purchase: CreatePurchase) => axios.post('purchases', purchase)
   .then((response) => response.data)
   .catch((error) => ({}));

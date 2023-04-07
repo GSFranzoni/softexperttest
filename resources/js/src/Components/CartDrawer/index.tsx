@@ -27,7 +27,6 @@ import { Icon } from "@iconify/react";
 const CartDrawer = () => {
   const {
     showCartDrawer,
-    onShowCartDrawer,
     onHideCartDrawer,
     productsInCart,
     removeFromCart,
@@ -35,7 +34,9 @@ const CartDrawer = () => {
     decreaseQuantity,
     total,
     tax,
-    isEmpty
+    isEmpty,
+    savePurchase,
+    isCreatingPurchase
   } = useContext(CartContext)
   return (
     <Drawer
@@ -94,6 +95,8 @@ const CartDrawer = () => {
               variant={'solid'}
               icon={<Icon icon={'mdi:cart-arrow-right'}/>}
               isDisabled={isEmpty}
+              isLoading={isCreatingPurchase}
+              onClick={savePurchase}
             />
           </HStack>
         </DrawerFooter>

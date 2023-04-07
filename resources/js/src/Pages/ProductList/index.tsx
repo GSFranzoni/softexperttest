@@ -51,7 +51,7 @@ const ProductList: React.FC = () => {
         <Text fontSize={'sm'}>No products found</Text>
       </Alert>
     )}
-    <Grid templateColumns={gridTemplateColumns} width={'100%'}>
+    <Grid templateColumns={gridTemplateColumns} width={'100%'} gap={5}>
       {products.map(product => (
         <Flex key={product.id} justifyContent={'center'}>
           <ProductCard {...product}/>
