@@ -49,6 +49,7 @@ type CartContextData = {
   showCartDrawer: boolean;
   onShowCartDrawer: () => void;
   onHideCartDrawer: () => void;
+  isEmpty: boolean;
 }
 
 export const CartContext = createContext<CartContextData>({} as CartContextData);
@@ -63,15 +64,19 @@ const CartProvider: React.FC<{
   const [ productsInCart, setProductsInCart ] = React.useState<ProductOnCard[]>([]);
 
   const total = React.useMemo(() => {
-    return productsInCart.reduce((acc, product) => acc + product.price, 0);
+    return productsInCart.reduce((acc, product) => acc + product.price * product.quantity, 0);
   }, [ productsInCart ]);
 
   const tax = React.useMemo(() => {
-    return productsInCart.reduce((acc, product) => acc + product.price * product.tax, 0);
+    return productsInCart.reduce((acc, product) => acc + product.price * product.tax * product.quantity, 0);
   }, [ productsInCart ]);
 
   const itemsCount = React.useMemo(() => {
     return productsInCart.reduce((acc, product) => acc + product.quantity, 0);
+  }, [ productsInCart ]);
+
+  const isEmpty = React.useMemo(() => {
+    return productsInCart.length === 0;
   }, [ productsInCart ]);
 
   const validateStock = useCallback(({ id, diff }: { id: number, diff: number }) => {
@@ -133,6 +138,7 @@ const CartProvider: React.FC<{
       onShowCartDrawer,
       onHideCartDrawer,
       itemsCount,
+      isEmpty,
     }}>
       {children}
     </CartContext.Provider>

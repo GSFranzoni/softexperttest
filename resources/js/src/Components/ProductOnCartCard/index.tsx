@@ -51,6 +51,7 @@ const ProductOnCartCard = ({ product, onRemove, onIncrease, onDecrease, ...props
             size={'xs'}
             colorScheme={'red'}
             icon={<Icon icon={'ion:trash-sharp'}/>}
+            variant={'ghost'}
             onClick={onRemove}
           />
         </Box>
