@@ -7,6 +7,8 @@ use App\Exception\ValidationException;
 use App\Persistence\Repository\ProductCategoryTaxRepository;
 use App\Service\CreateProductCategoryTaxService;
 use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\TransactionRequiredException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -66,8 +68,7 @@ class ProductCategoryTaxController
             );
 
             $this->createProductCategoryService->execute($input);
-        }
-        catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             $response->getBody()->write(json_encode([
                 'message' => $e->getMessage(),
                 'errors' => $e->getErrors()
@@ -76,5 +77,28 @@ class ProductCategoryTaxController
         }
 
         return $response->withStatus(201);
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     * @return ResponseInterface
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws TransactionRequiredException
+     */
+    public function show(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+        $id = (int)$args['id'];
+        $tax = $this->repository->getById($id);
+        if (!$tax) {
+            $response->getBody()->write(json_encode([
+                'message' => 'Tax not found',
+            ]));
+            return $response->withStatus(404);
+        }
+        $response->getBody()->write(json_encode($tax));
+        return $response->withStatus(200);
     }
 }

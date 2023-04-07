@@ -7,6 +7,7 @@ import CategoryCreatePage from "./Pages/CategoryCreate";
 import TaxList from "./Pages/TaxList";
 import TaxCreatePage from "./Pages/TaxCreate";
 import PurchaseList from "./Pages/PurchaseList";
+import TaxView from "./Pages/TaxView";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
           {
             path: 'create',
             element: <TaxCreatePage/>,
+          },
+          {
+            path: ':id',
+            element: <TaxView/>,
           }
         ]
       },

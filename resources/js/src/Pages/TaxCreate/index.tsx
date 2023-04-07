@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import TaxForm from "../../Components/TaxForm";
 import { createTax } from "../../Services/Taxes";
+import { FormScope } from "../../Types";
 
 const TaxCreatePage = () => {
   const navigate = useNavigate();
@@ -50,11 +51,16 @@ const TaxCreatePage = () => {
           }
         ]}/>
       </Flex>
-      <TaxForm defaultValues={{
-        description: '',
-      }} onSubmit={mutate} onCancel={() => {
-        navigate('/taxes')
-      }}/>
+      <TaxForm
+        defaultValues={{
+          description: '',
+        }}
+        onSubmit={mutate}
+        onCancel={() => {
+          navigate('/taxes')
+        }}
+        scope={FormScope.CREATE}
+      />
     </VStack>
   )
 }

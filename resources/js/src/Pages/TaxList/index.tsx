@@ -26,7 +26,9 @@ const TaxList = () => {
           path: '/taxes',
         },
       ]}/>
-      <TaxGrid onTaxClick={console.log}/>
+      <TaxGrid onTaxClick={(tax) => {
+        navigate(`/taxes/${tax.id}`)
+      }}/>
     </VStack>
   )
 }

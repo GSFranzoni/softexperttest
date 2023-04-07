@@ -33,3 +33,9 @@ export type Purchase = {
 }
 
 export type CreatePurchase = Pick<Purchase, 'products'>;
+
+export enum FormScope {
+  CREATE = 'create',
+  EDIT = 'edit',
+  VIEW = 'view',
+}
