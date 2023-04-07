@@ -9,19 +9,19 @@ use Symfony\Component\Validator\Constraints\Range;
 class CreatePurchasedProductDTO extends AbstractDTO
 {
     #[NotBlank]
-    public int $productId;
+    public int $id;
 
     #[Range(min: 1)]
     public int $quantity;
 
     /**
-     * @param int $productId
+     * @param int $id
      * @param int $quantity
      * @throws ValidationException
      */
-    public function __construct(int $productId, int $quantity)
+    public function __construct(int $id, int $quantity)
     {
-        $this->productId = $productId;
+        $this->id = $id;
         $this->quantity = $quantity;
 
         parent::__construct();

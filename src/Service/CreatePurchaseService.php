@@ -37,12 +37,12 @@ class CreatePurchaseService
         $this->purchaseRepository->save($purchase);
         foreach ($input->products as $purchasedProductDTO) {
             /** @var ?Product $product */
-            $product = $this->productRepository->getById($purchasedProductDTO->productId);
+            $product = $this->productRepository->getById($purchasedProductDTO->id);
             if (is_null($product)) {
-                throw new EntityNotFoundException("Product $purchasedProductDTO->productId not found");
+                throw new EntityNotFoundException("Product $purchasedProductDTO->id not found");
             }
             if ($product->getStock() < $purchasedProductDTO->quantity) {
-                throw new EntityNotFoundException("Product $purchasedProductDTO->productId has insufficient stock");
+                throw new EntityNotFoundException("Product $purchasedProductDTO->id has insufficient stock");
             }
             $category = $product->getCategory();
             $tax = $category->getTax();

@@ -5,27 +5,12 @@ namespace App\Http\Controller;
 use App\DataTransferObject\CreatePurchasedProductDTO;
 use App\DataTransferObject\CreatePurchaseDTO;
 use App\Exception\ValidationException;
-use App\Persistence\Entity\Product;
-use App\Persistence\Entity\Purchase;
-use App\Persistence\EntityManager\EntityManagerFactory;
 use App\Persistence\Repository\ProductRepository;
 use App\Persistence\Repository\PurchasedProductRepository;
 use App\Persistence\Repository\PurchaseRepository;
 use App\Service\CreatePurchaseService;
-use Doctrine\DBAL\Exception;
-use Doctrine\ORM\EntityNotFoundException;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\TransactionRequiredException;
-use Doctrine\Persistence\ObjectRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use RuntimeException;
-use Symfony\Component\Validator\ConstraintViolation;
-use Symfony\Component\Validator\ConstraintViolationList;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
-use Symfony\Component\Validator\ValidatorBuilder;
 use Throwable;
 
 class PurchaseController
@@ -93,7 +78,7 @@ class PurchaseController
 
             foreach ($body['products'] ?? [] as $product) {
                 $products[] = new CreatePurchasedProductDTO(
-                    productId: $product['productId'] ?? null,
+                    id: $product['id'] ?? null,
                     quantity: $product['quantity'] ?? null,
                 );
             }
