@@ -27,7 +27,7 @@ import { Icon } from '@iconify/react';
 
 const links = [
   {
-    label: 'Products',
+    label: 'ProductList',
     href: '/products',
   },
   {

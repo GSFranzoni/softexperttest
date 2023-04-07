@@ -71,7 +71,7 @@ class ProductController
                 description: $data['description'] ?? '',
                 price: $data['price'] ?? 0,
                 stock: $data['stock'] ?? 0,
-                productCategoryId: $data['productCategoryId'] ?? null
+                productCategoryId: $data['productCategoryId'] ?? 0
             );
 
             $this->createProductService->execute($input);
