@@ -33,11 +33,12 @@ import CategoryGrid from "../CategoryGrid";
 
 type ProductFormProps = {
   onSubmit: (data: any) => void;
+  isLoading?: boolean;
   onCancel?: () => void;
   defaultValues?: any;
 }
 
-const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onCancel, defaultValues }) => {
+const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, isLoading, onCancel, defaultValues }) => {
   const schema = yup.object().shape({
     name: yup.string().required(),
     description: yup.string().required(),
@@ -135,7 +136,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onCancel, defaultVa
       <CardFooter>
         <HStack justifyContent={'flex-end'} width={'100%'}>
           <Button colorScheme={'gray'} onClick={onCancel}>Back</Button>
-          <Button onClick={form.handleSubmit(onSubmit)} colorScheme={'whatsapp'}>Submit</Button>
+          <Button onClick={form.handleSubmit(onSubmit)} colorScheme={'whatsapp'} isLoading={isLoading}>Submit</Button>
         </HStack>
       </CardFooter>
       <AlertDialog

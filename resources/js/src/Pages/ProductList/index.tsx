@@ -1,6 +1,16 @@
 import React from "react";
 import ProductCard from "../../Components/ProductCard";
-import { Flex, Grid, HStack, IconButton, Text, useBreakpointValue, VStack } from "@chakra-ui/react";
+import {
+  Alert,
+  CircularProgress,
+  Flex,
+  Grid,
+  HStack,
+  IconButton,
+  Text,
+  useBreakpointValue,
+  VStack
+} from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
 import { CartContext } from "../../Contexts/CartContext";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +18,7 @@ import CustomBreadcrumb from "../../Components/CustomBreadcrumb";
 
 const ProductList: React.FC = () => {
   const navigate = useNavigate();
-  const { products } = React.useContext(CartContext);
+  const { products, isFetching } = React.useContext(CartContext);
   const gridTemplateColumns = useBreakpointValue({
     base: 'repeat(1, 1fr)',
     sm: 'repeat(2, 1fr)',
@@ -34,7 +44,14 @@ const ProductList: React.FC = () => {
         path: '/products',
       },
     ]}/>
-    <Grid templateColumns={gridTemplateColumns} gap={2} width={'100%'}>
+    {isFetching && <CircularProgress isIndeterminate color={'green.200'}/>}
+    {!isFetching && products.length === 0 && (
+      <Alert status={'info'} gap={3} width={'100%'}>
+        <Icon icon={'mdi:information'} width={20} height={20}/>
+        <Text fontSize={'sm'}>No products found</Text>
+      </Alert>
+    )}
+    <Grid templateColumns={gridTemplateColumns} width={'100%'}>
       {products.map(product => (
         <Flex key={product.id} justifyContent={'center'}>
           <ProductCard {...product}/>

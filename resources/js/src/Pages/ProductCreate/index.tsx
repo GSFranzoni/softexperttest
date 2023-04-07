@@ -10,7 +10,7 @@ const ProductCreatePage = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const queryClient = useQueryClient();
-  const { mutateAsync } = useMutation(createProduct, {
+  const { mutateAsync, isLoading } = useMutation(createProduct, {
     onSuccess: async () => {
       toast({
         title: 'Product created',
@@ -50,15 +50,20 @@ const ProductCreatePage = () => {
           }
         ]}/>
       </Flex>
-      <ProductForm defaultValues={{
-        name: '',
-        price: 0,
-        description: '',
-        stock: 0,
-        category: {}
-      }} onSubmit={mutateAsync} onCancel={() => {
-        navigate('/products')
-      }}/>
+      <ProductForm
+        defaultValues={{
+          name: '',
+          price: 0,
+          description: '',
+          stock: 0,
+          category: {}
+        }}
+        onSubmit={mutateAsync}
+        onCancel={() => {
+          navigate('/products')
+        }}
+        isLoading={isLoading}
+      />
     </VStack>
   )
 }

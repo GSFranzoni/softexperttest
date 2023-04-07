@@ -22,6 +22,7 @@ type CartContextData = {
   onShowCartDrawer: () => void;
   onHideCartDrawer: () => void;
   isEmpty: boolean;
+  isFetching: boolean;
 }
 
 export const CartContext = createContext<CartContextData>({} as CartContextData);
@@ -31,7 +32,7 @@ const CartProvider: React.FC<{
 }> = ({ children }) => {
   const { isOpen: showCartDrawer, onOpen: onShowCartDrawer, onClose: onHideCartDrawer } = useDisclosure();
 
-  const { data: { products, pages } } = useQuery<any>([ 'products' ], () => getProducts({}), {
+  const { data: { products, pages }, isFetching } = useQuery<any>([ 'products' ], () => getProducts({}), {
     initialData: {
       products: [],
     }
@@ -115,6 +116,7 @@ const CartProvider: React.FC<{
       onHideCartDrawer,
       itemsCount,
       isEmpty,
+      isFetching,
     }}>
       {children}
     </CartContext.Provider>
