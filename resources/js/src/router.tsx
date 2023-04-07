@@ -4,6 +4,8 @@ import MainLayout from "./Layouts/Main";
 import ProductCreatePage from "./Pages/ProductCreate";
 import CategoryList from "./Pages/CategoryList";
 import CategoryCreatePage from "./Pages/CategoryCreate";
+import TaxList from "./Pages/TaxList";
+import TaxCreatePage from "./Pages/TaxCreate";
 
 const router = createBrowserRouter([
   {
@@ -38,7 +40,16 @@ const router = createBrowserRouter([
       },
       {
         path: '/taxes',
-        element: null
+        children: [
+          {
+            path: '',
+            element: <TaxList/>,
+          },
+          {
+            path: 'create',
+            element: <TaxCreatePage/>,
+          }
+        ]
       },
       {
         path: '/purchases',

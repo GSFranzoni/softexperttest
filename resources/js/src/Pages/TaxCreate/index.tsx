@@ -3,25 +3,25 @@ import React from "react";
 import CustomBreadcrumb from "../../Components/CustomBreadcrumb";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import CategoryForm from "../../Components/CategoryForm";
-import { createCategory } from "../../Services/Categories";
+import TaxForm from "../../Components/TaxForm";
+import { createTax } from "../../Services/Taxes";
 
-const CategoryCreatePage = () => {
+const TaxCreatePage = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const queryClient = useQueryClient();
-  const { mutate } = useMutation(createCategory, {
+  const { mutate } = useMutation(createTax, {
     onSuccess: async () => {
       toast({
-        title: 'Category created',
+        title: 'Tax created',
         status: 'success',
         duration: 2000,
         isClosable: true,
       })
       await queryClient.invalidateQueries({
-        queryKey: [ 'categories' ]
+        queryKey: [ 'taxes' ]
       })
-      navigate('/categories')
+      navigate('/taxes')
     },
     onError: (error) => {
       toast({
@@ -36,27 +36,27 @@ const CategoryCreatePage = () => {
   return (
     <VStack justifyContent={'start'} gap={2} width={'100%'}>
       <HStack width={'100%'} justifyContent={'space-between'} py={1}>
-        <Text fontSize={'2xl'} fontWeight={'bold'}>Create Category</Text>
+        <Text fontSize={'2xl'} fontWeight={'bold'}>Create Tax</Text>
       </HStack>
       <Flex width={'100%'} justifyContent={'start'}>
         <CustomBreadcrumb crumbs={[
           {
-            label: 'Categories',
-            path: '/categories',
+            label: 'Taxes',
+            path: '/taxes',
           },
           {
             label: 'Create',
-            path: '/categories/create',
+            path: '/taxes/create',
           }
         ]}/>
       </Flex>
-      <CategoryForm defaultValues={{
+      <TaxForm defaultValues={{
         description: '',
       }} onSubmit={mutate} onCancel={() => {
-        navigate('/categories')
+        navigate('/taxes')
       }}/>
     </VStack>
   )
 }
 
-export default CategoryCreatePage
+export default TaxCreatePage
