@@ -1,7 +1,8 @@
 import { ProductCategoryTax } from "../../Types";
-import { Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
+import { HStack, IconButton, Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { getTaxes } from "../../Services/Taxes";
+import { Icon } from "@iconify/react";
 
 type TaxGridProps = {
   onTaxClick: (tax: ProductCategoryTax) => void;
@@ -20,6 +21,7 @@ const TaxGrid = ({ onTaxClick }: TaxGridProps) => {
             <Th>ID</Th>
             <Th>Description</Th>
             <Th>Percent</Th>
+            <Th>Action</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -29,6 +31,22 @@ const TaxGrid = ({ onTaxClick }: TaxGridProps) => {
               <Th>{tax.id}</Th>
               <Th>{tax.description}</Th>
               <Th>{Intl.NumberFormat('en-US', { style: 'percent' }).format(tax.percent)}</Th>
+              <Th>
+                <HStack>
+                  <IconButton
+                    aria-label={'delete tax'}
+                    icon={<Icon icon={'mdi:delete'} width={20} height={20}/>}
+                    size={'sm'}
+                    colorScheme={'red'}
+                    variant={'link'}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      console.log('delete tax')
+
+                    }}
+                  />
+                </HStack>
+              </Th>
             </Tr>
           ))}
           {taxes.length === 0 && (
