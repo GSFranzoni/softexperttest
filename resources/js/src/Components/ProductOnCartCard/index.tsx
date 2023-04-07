@@ -12,11 +12,11 @@ const ProductOnCartCard = ({ product, onRemove, onIncrease, onDecrease, ...props
                            } & CardProps
 ) => {
   const formattedPrice = useMemo(() => formatPrice(product.price * product.quantity), [ product.price, product.quantity ]);
-  const formattedTax = useMemo(() => formatPrice(product.price * product.quantity * product.tax), [ product.price, product.quantity, product.tax ]);
+  const formattedTax = useMemo(() => formatPrice(product.price * product.quantity * product.category.tax.percent), [ product.price, product.quantity, product.category ]);
   return (
     <Card {...props}>
       <HStack>
-        <Image src={product.image} width={'80px'}/>
+        <Image src={product.image || 'https://via.placeholder.com/150'} alt={product.name} width={'80px'}/>
         <VStack alignItems={'start'} spacing={1} flex={1}>
           <Text fontSize={'xs'} color={'gray.500'}>{product.name}</Text>
           <HStack>

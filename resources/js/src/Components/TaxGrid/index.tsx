@@ -1,16 +1,20 @@
 import { ProductCategoryTax } from "../../Types";
 import { Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
+import { getTaxes } from "../../Services/Taxes";
 
 type TaxGridProps = {
-  taxes: ProductCategoryTax[];
-  isFetching: boolean;
   onTaxClick: (tax: ProductCategoryTax) => void;
 }
 
-const TaxGrid = ({ taxes, isFetching, onTaxClick }: TaxGridProps) => {
+const TaxGrid = ({ onTaxClick }: TaxGridProps) => {
+  const { data: taxes, isFetching } = useQuery([ 'taxes' ], getTaxes, {
+    refetchOnWindowFocus: false,
+    initialData: [],
+  })
   return (
     <TableContainer width={'100%'}>
-      <Table variant={'simple'}>
+      <Table variant={'striped'}>
         <Thead>
           <Tr>
             <Th>ID</Th>
@@ -24,7 +28,7 @@ const TaxGrid = ({ taxes, isFetching, onTaxClick }: TaxGridProps) => {
                 _hover={{ cursor: 'pointer', opacity: 0.8 }}>
               <Th>{tax.id}</Th>
               <Th>{tax.description}</Th>
-              <Th>{tax.percent}%</Th>
+              <Th>{Intl.NumberFormat('en-US', { style: 'percent' }).format(tax.percent)}</Th>
             </Tr>
           ))}
           {taxes.length === 0 && (

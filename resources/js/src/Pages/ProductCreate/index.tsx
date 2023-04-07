@@ -10,7 +10,7 @@ const ProductCreatePage = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const queryClient = useQueryClient();
-  const { mutate } = useMutation(createProduct, {
+  const { mutateAsync } = useMutation(createProduct, {
     onSuccess: async () => {
       toast({
         title: 'Product created',
@@ -54,7 +54,9 @@ const ProductCreatePage = () => {
         name: '',
         price: 0,
         description: '',
-      }} onSubmit={mutate} onCancel={() => {
+        stock: 0,
+        category: {}
+      }} onSubmit={mutateAsync} onCancel={() => {
         navigate('/products')
       }}/>
     </VStack>

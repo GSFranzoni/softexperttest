@@ -10,6 +10,9 @@ export const getTaxes = async () => axios.get<PaginatedResponse<ProductCategoryT
   .then((response) => response.data.data)
   .catch((error) => ([]));
 
-export const createTax = async (tax: ProductCategoryTax) => axios.post('/products/categories/taxes', tax)
+export const createTax = async (tax: ProductCategoryTax) => axios.post('/products/categories/taxes', {
+  ...tax,
+  percent: tax.percent / 100
+})
   .then((response) => response.data)
   .catch((error) => ({}));

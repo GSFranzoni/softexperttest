@@ -1,48 +1,20 @@
-import { ProductCardProps } from "../../Components/ProductCard";
 import React, { createContext, useCallback } from "react";
 import { useDisclosure } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
+import { getProducts } from "../../Services/Products";
+import { Product } from "../../Types";
 
-const fakeProducts: ProductCardProps[] = [
-  {
-    id: 1,
-    name: 'Product 1',
-    price: 10,
-    tax: 0.1,
-    description: 'This is a product',
-    image: 'https://via.placeholder.com/150',
-    stock: 0,
-  },
-  {
-    id: 2,
-    name: 'Product 2',
-    price: 20,
-    tax: 0.1,
-    description: 'This is a product',
-    image: 'https://via.placeholder.com/150',
-    stock: 10,
-  },
-  {
-    id: 3,
-    name: 'Product 3',
-    price: 30,
-    tax: 0.1,
-    description: 'This is a product',
-    image: 'https://via.placeholder.com/150',
-    stock: 10,
-  }
-]
-
-export type ProductOnCard = ProductCardProps & {
+export type ProductOnCard = Product & {
   quantity: number;
 }
 
 type CartContextData = {
-  products: ProductCardProps[];
+  products: Product[];
   productsInCart: ProductOnCard[];
-  addToCart: (product: ProductCardProps) => void;
-  removeFromCart: (product: ProductCardProps) => void;
-  increaseQuantity: (product: ProductCardProps) => void;
-  decreaseQuantity: (product: ProductCardProps) => void;
+  addToCart: (product: Product) => void;
+  removeFromCart: (product: Product) => void;
+  increaseQuantity: (product: Product) => void;
+  decreaseQuantity: (product: Product) => void;
   total: number;
   tax: number;
   itemsCount: number;
@@ -59,7 +31,11 @@ const CartProvider: React.FC<{
 }> = ({ children }) => {
   const { isOpen: showCartDrawer, onOpen: onShowCartDrawer, onClose: onHideCartDrawer } = useDisclosure();
 
-  const [ products, setProducts ] = React.useState<ProductCardProps[]>(fakeProducts);
+  const { data: { products, pages } } = useQuery<any>([ 'products' ], () => getProducts({}), {
+    initialData: {
+      products: [],
+    }
+  });
 
   const [ productsInCart, setProductsInCart ] = React.useState<ProductOnCard[]>([]);
 
@@ -68,7 +44,7 @@ const CartProvider: React.FC<{
   }, [ productsInCart ]);
 
   const tax = React.useMemo(() => {
-    return productsInCart.reduce((acc, product) => acc + product.price * product.tax * product.quantity, 0);
+    return productsInCart.reduce((acc, product) => acc + product.price * product.category.tax.percent * product.quantity, 0);
   }, [ productsInCart ]);
 
   const itemsCount = React.useMemo(() => {
@@ -80,7 +56,7 @@ const CartProvider: React.FC<{
   }, [ productsInCart ]);
 
   const validateStock = useCallback(({ id, diff }: { id: number, diff: number }) => {
-    const product = products.find(p => p.id === id);
+    const product = products.find((p: any) => p.id === id);
     if (!product) {
       return false;
     }
@@ -105,7 +81,7 @@ const CartProvider: React.FC<{
 
   const decreaseQuantity = ({ id }: { id: number }) => changeQuantity({ id, diff: -1 });
 
-  const addToCart = useCallback((product: ProductCardProps) => {
+  const addToCart = useCallback((product: Product) => {
     const productOnCard = productsInCart.find(p => p.id === product.id);
     onShowCartDrawer();
     if (productOnCard) {
@@ -120,7 +96,7 @@ const CartProvider: React.FC<{
     ]);
   }, [ products, productsInCart ]);
 
-  const removeFromCart = (product: ProductCardProps) => {
+  const removeFromCart = (product: Product) => {
     setProductsInCart(productsInCart.filter(p => p.id !== product.id));
   };
 

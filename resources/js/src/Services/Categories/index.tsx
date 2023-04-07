@@ -10,5 +10,8 @@ export const getCategories = async () => axios.get<PaginatedResponse<ProductCate
   .then((response) => response.data.data)
   .catch((error) => ([]));
 
-export const createCategory = async (category: ProductCategory) => axios.post('/products/categories', category)
+export const createCategory = async (category: ProductCategory) => axios.post('/products/categories', {
+  ...category,
+  taxId: category.tax.id
+})
   .then((response) => response.data)

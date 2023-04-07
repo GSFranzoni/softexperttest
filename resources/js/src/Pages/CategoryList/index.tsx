@@ -1,18 +1,12 @@
-import { HStack, IconButton, Progress, Text, VStack } from "@chakra-ui/react";
+import { HStack, IconButton, Text, VStack } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
 import CustomBreadcrumb from "../../Components/CustomBreadcrumb";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import CategoryGrid from "../../Components/CategoryGrid";
-import { getCategories } from "../../Services/Categories";
-import { useQuery } from "@tanstack/react-query";
 
 const CategoryList = () => {
   const navigate = useNavigate();
-  const { data: categories, isLoading } = useQuery([ 'categories' ], getCategories, {
-    refetchOnWindowFocus: false,
-    initialData: [],
-  })
   return (
     <VStack alignItems={'start'} gap={3} width={'100%'}>
       <HStack width={'100%'} justifyContent={'space-between'} py={1}>
@@ -32,8 +26,7 @@ const CategoryList = () => {
           path: '/categories',
         },
       ]}/>
-      {isLoading && <Progress size={'xs'} isIndeterminate/>}
-      <CategoryGrid categories={categories} isFetching={isLoading} onCategoryClick={console.log}/>
+      <CategoryGrid onCategoryClick={console.log}/>
     </VStack>
   )
 }

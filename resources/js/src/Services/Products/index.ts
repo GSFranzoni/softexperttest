@@ -16,5 +16,8 @@ export const getProducts = async ({
     products: response.data.data,
   }))
 
-export const createProduct = async (product: any) => axios.post('/products', product)
+export const createProduct = async (product: any) => axios.post('/products', {
+  ...product,
+  productCategoryId: parseInt(product.category.id, 10),
+})
   .then((response) => response.data)

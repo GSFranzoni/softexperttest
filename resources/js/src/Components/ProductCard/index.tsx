@@ -3,36 +3,27 @@ import { Button, Card, CardBody, HStack, Image, Text, VStack } from "@chakra-ui/
 import { formatPrice } from "../../Utils/Money";
 import { CartContext } from "../../Contexts/CartContext";
 import { Icon } from "@iconify/react";
+import { Product } from "../../Types";
 
-export type ProductCardProps = {
-  id: number;
-  name: string;
-  price: number;
-  tax: number;
-  description: string;
-  image: string;
-  stock: number;
-}
-
-const ProductCard: React.FC<ProductCardProps> = ({
-                                                   id,
-                                                   name,
-                                                   price,
-                                                   tax,
-                                                   description,
-                                                   image,
-                                                   stock,
-                                                 }) => {
+const ProductCard: React.FC<Product> = ({
+                                          id,
+                                          name,
+                                          price,
+                                          category,
+                                          description,
+                                          image,
+                                          stock,
+                                        }) => {
   const formattedPrice = useMemo(() => formatPrice(price), [ price ]);
 
-  const formattedTax = useMemo(() => formatPrice(price * tax), [ price, tax ]);
+  const formattedTax = useMemo(() => formatPrice(price * category.tax.percent), [ price, category ]);
 
   const inStock = useMemo(() => stock > 0, [ stock ]);
 
   const { addToCart } = useContext(CartContext);
 
   return <Card width={'100%'} boxShadow={'2xl'}>
-    <Image src={image} alt={name}/>
+    <Image src={image || 'https://via.placeholder.com/150'} alt={name} width={'100%'} height={'180px'}/>
     <CardBody>
       <VStack alignItems={'start'}>
         <Text fontSize={'lg'} fontWeight={'bold'}>{name}</Text>
@@ -57,7 +48,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       colorScheme={inStock ? 'whatsapp' : 'red'}
       isDisabled={!inStock}
       onClick={() => {
-        addToCart({ id, name, price, tax, description, image, stock });
+        addToCart({ id, name, price, category, description, image, stock });
       }}
       leftIcon={
         <Icon icon={'ic:round-add-shopping-cart'} color={'black'}/>
