@@ -29,4 +29,5 @@ export type Purchase = {
   products: PurchasedProduct[];
   total: number;
   tax: number;
+  date: string;
 }

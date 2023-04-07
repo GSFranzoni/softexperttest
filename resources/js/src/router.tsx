@@ -6,6 +6,7 @@ import CategoryList from "./Pages/CategoryList";
 import CategoryCreatePage from "./Pages/CategoryCreate";
 import TaxList from "./Pages/TaxList";
 import TaxCreatePage from "./Pages/TaxCreate";
+import PurchaseList from "./Pages/PurchaseList";
 
 const router = createBrowserRouter([
   {
@@ -53,7 +54,16 @@ const router = createBrowserRouter([
       },
       {
         path: '/purchases',
-        element: null
+        children: [
+          {
+            path: '',
+            element: <PurchaseList/>,
+          },
+          {
+            path: 'create',
+            element: null
+          }
+        ]
       },
     ]
   },
