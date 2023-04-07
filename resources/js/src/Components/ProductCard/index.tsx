@@ -2,6 +2,7 @@ import React, { useContext, useMemo } from "react";
 import { Button, Card, CardBody, HStack, Image, Text, VStack } from "@chakra-ui/react";
 import { formatPrice } from "../../Utils/Money";
 import { CartContext } from "../../Contexts/CartContext";
+import { Icon } from "@iconify/react";
 
 export type ProductCardProps = {
   id: number;
@@ -56,6 +57,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
       onClick={() => {
         addToCart({ id, name, price, tax, description, image, stock });
       }}
+      leftIcon={
+        <Icon icon={'ic:round-add-shopping-cart'} color={'black'}/>
+      }
     >
       Add to cart
     </Button>
