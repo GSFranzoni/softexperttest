@@ -42,7 +42,6 @@ const TaxGrid = ({ onTaxClick }: TaxGridProps) => {
                     onClick={(e) => {
                       e.stopPropagation();
                       console.log('delete tax')
-
                     }}
                   />
                 </HStack>

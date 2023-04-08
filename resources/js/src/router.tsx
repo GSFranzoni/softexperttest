@@ -8,12 +8,17 @@ import TaxList from "./Pages/TaxList";
 import TaxCreatePage from "./Pages/TaxCreate";
 import PurchaseList from "./Pages/PurchaseList";
 import TaxView from "./Pages/TaxView";
+import LoginPage from "./Pages/LoginPage";
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <MainLayout/>,
     children: [
+      {
+        path: '',
+        element: <ProductList/>,
+      },
       {
         path: '/products',
         children: [
@@ -72,6 +77,15 @@ const router = createBrowserRouter([
       },
     ]
   },
+  {
+    path: '/auth',
+    children: [
+      {
+        path: 'login',
+        element: <LoginPage/>
+      }
+    ]
+  }
 ])
 
 export {
