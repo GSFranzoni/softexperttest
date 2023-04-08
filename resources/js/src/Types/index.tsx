@@ -39,3 +39,19 @@ export enum FormScope {
   EDIT = 'edit',
   VIEW = 'view',
 }
+
+export enum UserRole {
+  ADMIN = 'admin',
+  REGULAR = 'regular',
+}
+
+export type User = {
+  id: number;
+  name: string;
+  email: string;
+  role: UserRole;
+}
+
+export type AuthenticatedUser = User & {
+  token: string;
+}

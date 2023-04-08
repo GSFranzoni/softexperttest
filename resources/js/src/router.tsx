@@ -9,11 +9,14 @@ import TaxCreatePage from "./Pages/TaxCreate";
 import PurchaseList from "./Pages/PurchaseList";
 import TaxView from "./Pages/TaxView";
 import LoginPage from "./Pages/LoginPage";
+import AuthProvider from "./Contexts/AuthContext";
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <MainLayout/>,
+    element: <AuthProvider>
+      <MainLayout/>
+    </AuthProvider>,
     children: [
       {
         path: '',
