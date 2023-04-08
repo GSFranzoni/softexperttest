@@ -21,6 +21,7 @@ type AuthContextData = {
   user: User | null;
   login: (user: LoginFormValues) => void;
   isLoggingIn: boolean;
+  logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -30,7 +31,7 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const [ status, setStatus ] = useState<AuthStatus>(AuthStatus.IDLE)
 
-  const [ token, setToken ] = useState<string>(localStorage.getItem('token') || '')
+  const [ token, setToken ] = useState<string | null>(localStorage.getItem('token') || null)
 
   const {
     data: user,
@@ -67,11 +68,15 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     }
   })
 
+  const logout = () => {
+    setToken(null)
+  }
+
   useEffect(() => {
     if (status === AuthStatus.UNAUTHENTICATED) {
       toast({
-        title: 'Error',
-        description: 'You need to login to access this page',
+        title: 'Unauthorized',
+        description: 'You need to login',
         status: 'error',
         duration: 2000,
         icon: <LockIcon/>,
@@ -96,6 +101,7 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       status,
       login,
       isLoggingIn,
+      logout
     }}>
       {status === AuthStatus.UNAUTHENTICATED && (
         <LoginPage/>

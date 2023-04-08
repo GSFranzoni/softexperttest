@@ -10,6 +10,7 @@ import PurchaseList from "./Pages/PurchaseList";
 import TaxView from "./Pages/TaxView";
 import LoginPage from "./Pages/LoginPage";
 import AuthProvider from "./Contexts/AuthContext";
+import HomePage from "./Pages/HomePage";
 
 const router = createBrowserRouter([
   {
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '',
-        element: <ProductList/>,
+        element: <HomePage/>,
       },
       {
         path: '/products',
@@ -78,6 +79,23 @@ const router = createBrowserRouter([
           }
         ]
       },
+      {
+        path: '/users',
+        children: [
+          {
+            path: '',
+            element: null
+          },
+          {
+            path: 'create',
+            element: null
+          },
+          {
+            path: ':id',
+            element: null
+          },
+        ]
+      }
     ]
   },
   {

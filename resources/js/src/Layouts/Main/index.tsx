@@ -18,29 +18,40 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
-import { NavLink, NavLinkProps, Outlet } from 'react-router-dom';
+import { NavLink, NavLinkProps, Outlet, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/react.svg';
 import { ReactNode, useContext } from "react";
 import CartDrawer from "../../Components/CartDrawer";
 import { CartContext } from "../../Contexts/CartContext";
 import { Icon } from '@iconify/react';
+import { UserRole } from "../../Types";
+import { AuthContext } from "../../Contexts/AuthContext";
 
 const links = [
   {
     label: 'Products',
     href: '/products',
+    roles: [ UserRole.REGULAR ]
   },
   {
     label: 'Purchases',
     href: '/purchases',
+    roles: [ UserRole.REGULAR ]
   },
   {
     label: 'Categories',
     href: '/categories',
+    roles: [ UserRole.REGULAR ]
   },
   {
     label: 'Taxes',
     href: '/taxes',
+    roles: [ UserRole.REGULAR ]
+  },
+  {
+    label: 'Users',
+    href: '/users',
+    roles: [ UserRole.ADMIN ]
   }
 ]
 
@@ -70,15 +81,20 @@ const CustomNavLink = ({ children, to, ...props }: NavLinkProps) => {
 
 export default function MainLayout() {
   const { colorMode, toggleColorMode } = useColorMode();
-  const { showCartDrawer, onShowCartDrawer, onHideCartDrawer, itemsCount } = useContext(CartContext)
+  const { onShowCartDrawer, itemsCount } = useContext(CartContext)
+  const navigate = useNavigate()
+  const { user, logout } = useContext(AuthContext)
+  const allowedLinks = links.filter(link => link.roles.includes(user?.role as UserRole))
   return (
     <Stack maxH={'100%'}>
       <CartDrawer/>
       <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <HStack>
-            <Image src={Logo} alt={'Logo'} boxSize={'40px'} mr={2}/>
-            {links.map((link) => (
+            <Image cursor={'pointer'} src={Logo} alt={'Logo'} boxSize={'40px'} mr={2} onClick={() => {
+              navigate('/')
+            }}/>
+            {allowedLinks.map((link) => (
               <CustomNavLink key={link.label} to={link.href}>
                 {link.label}
               </CustomNavLink>
@@ -88,9 +104,11 @@ export default function MainLayout() {
             <Stack direction={'row'} spacing={5}>
               <HStack>
                 <Box position={'relative'}>
-                  <Button onClick={onShowCartDrawer}>
-                    <Icon icon="mdi:cart"/>
-                  </Button>
+                  {user?.role === UserRole.REGULAR && (
+                    <Button onClick={onShowCartDrawer}>
+                      <Icon icon="mdi:cart"/>
+                    </Button>
+                  )}
                   {itemsCount > 0 && (
                     <Badge
                       position={'absolute'}
@@ -138,7 +156,9 @@ export default function MainLayout() {
                   <MenuDivider/>
                   <MenuItem>Your Servers</MenuItem>
                   <MenuItem>Account Settings</MenuItem>
-                  <MenuItem>Logout</MenuItem>
+                  <MenuItem onClick={() => {
+                    logout()
+                  }}>Logout</MenuItem>
                 </MenuList>
               </Menu>
             </Stack>

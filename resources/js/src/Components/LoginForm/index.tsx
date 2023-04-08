@@ -63,7 +63,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading }) => {
                     pointerEvents="none"
                     children={<Icon icon={'mdi:email'} width={20} height={20}/>}
                   />
-                  <Input id="email" type="email" {...form.register('email')}/>
+                  <Input id="email" type="email" placeholder={'E-mail'} {...form.register('email')}/>
                 </InputGroup>
                 {form.formState.errors.email && (
                   <FormErrorMessage>{form.formState.errors.email.message}</FormErrorMessage>
@@ -77,6 +77,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading }) => {
                     children={<Icon icon={'mdi:lock'} width={20} height={20}/>}
                   />
                   <Input id="password"
+                         placeholder={'Password'}
                          type={form.watch('showPassword') ? 'text' : 'password'} {...form.register('password')}/>
                   <InputRightElement>
                     <IconButton
