@@ -50,7 +50,7 @@ const TaxGrid = ({ onTaxClick }: TaxGridProps) => {
           ))}
           {taxes.length === 0 && (
             <Tr>
-              <Th colSpan={3} textAlign={'center'}>
+              <Th colSpan={4} textAlign={'center'}>
                 {isFetching ? 'Loading...' : 'No taxes found'}
               </Th>
             </Tr>
