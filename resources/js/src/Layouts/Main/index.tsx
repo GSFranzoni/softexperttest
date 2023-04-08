@@ -14,18 +14,21 @@ import {
   MenuItem,
   MenuList,
   Stack,
+  Text,
   useColorMode,
   useColorModeValue,
+  VStack,
 } from '@chakra-ui/react';
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { NavLink, NavLinkProps, Outlet, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/react.svg';
-import { ReactNode, useContext } from "react";
+import { ReactNode, useContext, useMemo } from "react";
 import CartDrawer from "../../Components/CartDrawer";
 import { CartContext } from "../../Contexts/CartContext";
 import { Icon } from '@iconify/react';
 import { UserRole } from "../../Types";
 import { AuthContext } from "../../Contexts/AuthContext";
+import { makeGravatarUrl } from "../../Utils/Gravatar";
 
 const links = [
   {
@@ -85,6 +88,10 @@ export default function MainLayout() {
   const navigate = useNavigate()
   const { user, logout } = useContext(AuthContext)
   const allowedLinks = links.filter(link => link.roles.includes(user?.role as UserRole))
+  const gravatarUrl = useMemo(() => makeGravatarUrl({
+    email: user?.email as string,
+    size: 200
+  }), [ user?.email ])
   return (
     <Stack maxH={'100%'}>
       <CartDrawer/>
@@ -137,7 +144,7 @@ export default function MainLayout() {
                   minW={0}>
                   <Avatar
                     size={'sm'}
-                    src={'https://avatars.dicebear.com/api/male/username.svg'}
+                    src={gravatarUrl}
                   />
                 </MenuButton>
                 <MenuList alignItems={'center'}>
@@ -145,13 +152,22 @@ export default function MainLayout() {
                   <Center>
                     <Avatar
                       size={'2xl'}
-                      src={'https://avatars.dicebear.com/api/male/username.svg'}
+                      src={gravatarUrl}
                     />
                   </Center>
                   <br/>
-                  <Center>
-                    <p>Username</p>
-                  </Center>
+                  <VStack spacing={0}>
+                    <Center>
+                      <Text fontSize={'md'} fontWeight={'bold'}>
+                        {user?.name}
+                      </Text>
+                    </Center>
+                    <Center>
+                      <Text fontSize={'xs'} fontWeight={'normal'} color={'gray.500'}>
+                        {user?.email}
+                      </Text>
+                    </Center>
+                  </VStack>
                   <br/>
                   <MenuDivider/>
                   <MenuItem>Your Servers</MenuItem>
@@ -169,5 +185,6 @@ export default function MainLayout() {
         <Outlet/>
       </Box>
     </Stack>
-  );
+  )
+    ;
 }
