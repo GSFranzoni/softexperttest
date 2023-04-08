@@ -14,7 +14,7 @@ abstract class AbstractRepository
     /**
      * @var EntityManager
      */
-    private EntityManager $entityManager;
+    protected EntityManager $entityManager;
 
     /**
      * @throws ORMException
