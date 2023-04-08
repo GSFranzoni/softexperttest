@@ -7,7 +7,7 @@ import { Card, Fade, HStack, Spinner, Text, useToast, VStack } from "@chakra-ui/
 import LoginPage from "../../Pages/LoginPage";
 import BackgroundOverlay from "../../Components/BackgroundOverlay";
 import { LockIcon } from "@chakra-ui/icons";
-import axios from "axios";
+import { updateLocalStorageToken } from "../../boot/axios";
 
 enum AuthStatus {
   IDLE,
@@ -77,21 +77,17 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
         icon: <LockIcon/>,
         isClosable: true,
       })
-      axios.defaults.headers.common['Authorization'] = undefined
-      localStorage.removeItem('token')
+      updateLocalStorageToken(null)
     }
   }, [ status ])
 
   useEffect(() => {
+    updateLocalStorageToken(token)
     if (!token) {
       return setStatus(AuthStatus.UNAUTHENTICATED)
     }
     setStatus(AuthStatus.PENDING)
-    refetch()
-      .finally(() => {
-        localStorage.setItem('token', token)
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-      })
+    refetch().then()
   }, [ token ])
 
   return (
