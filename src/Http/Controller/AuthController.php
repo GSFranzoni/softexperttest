@@ -5,10 +5,17 @@ namespace App\Http\Controller;
 use App\DataTransferObject\LoginDTO;
 use App\DataTransferObject\RegisterDTO;
 use App\Exception\DomainException;
+use App\Http\Middleware\AuthenticateMiddleware;
+use App\Persistence\Entity\User;
 use App\Persistence\Enums\UserRole;
 use App\Persistence\Repository\UserRepository;
 use App\Service\LoginService;
 use App\Service\RegisterService;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\TransactionRequiredException;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
@@ -95,12 +102,36 @@ class AuthController
                 json_encode(['message' => $e->getMessage()])
             );
             return $response->withStatus(400);
-        }
-        catch (Throwable $t) {
+        } catch (Throwable $t) {
             $response->getBody()->write(
                 json_encode(['message' => 'Internal server error'])
             );
             return $response->withStatus(500);
         }
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     * @return ResponseInterface
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws TransactionRequiredException
+     */
+    public function me(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+        $token = substr($request->getHeaderLine(AuthenticateMiddleware::TOKEN_HEADER), strlen(AuthenticateMiddleware::TOKEN_PREFIX));
+
+        $payload = JWT::decode($token, new Key(getenv('JWT_SECRET'), getenv('JWT_ALGORITHM')));
+
+        /** @var User $user */
+        $user = $this->userRepository->getById($payload->user);
+
+        $response->getBody()->write(
+            json_encode($user)
+        );
+
+        return $response->withStatus(200);
     }
 }

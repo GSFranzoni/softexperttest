@@ -41,5 +41,7 @@ return function (Slim\Routing\RouteCollectorProxy $group) {
         $group->post('/login', [AuthController::class, 'login']);
         $group->post('/register', [AuthController::class, 'register'])
             ->add(new AuthenticateMiddleware(UserRole::ADMIN));
+        $group->get('/me', [AuthController::class, 'me'])
+            ->add(new AuthenticateMiddleware(null));
     });
 };
