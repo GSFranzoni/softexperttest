@@ -23,7 +23,7 @@ return function (Slim\Routing\RouteCollectorProxy $group) {
             $group->get('/{id}', [ProductCategoryController::class, 'show']);
             $group->post('', [ProductCategoryController::class, 'store']);
         });
-    })->add(new AuthenticateMiddleware(UserRole::ADMIN));
+    })->add(new AuthenticateMiddleware(UserRole::REGULAR));
 
     $group->group('/purchases', function (Slim\Routing\RouteCollectorProxy $group) {
         $group->get('', [PurchaseController::class, 'index']);
