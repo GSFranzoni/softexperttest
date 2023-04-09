@@ -38,6 +38,7 @@ export enum FormScope {
   CREATE = 'create',
   EDIT = 'edit',
   VIEW = 'view',
+  DELETE = 'delete',
 }
 
 export enum UserRole {

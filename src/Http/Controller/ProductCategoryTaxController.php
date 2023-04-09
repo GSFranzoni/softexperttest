@@ -3,12 +3,15 @@
 namespace App\Http\Controller;
 
 use App\DataTransferObject\CreateProductCategoryTaxDTO;
+use App\DataTransferObject\UpdateProductCategoryTaxDTO;
 use App\Exception\ValidationException;
 use App\Persistence\Repository\ProductCategoryTaxRepository;
 use App\Service\CreateProductCategoryTaxService;
+use App\Service\UpdateProductCategoryTaxService;
 use Doctrine\ORM\Exception\ORMException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Throwable;
 
 class ProductCategoryTaxController
 {
@@ -20,13 +23,20 @@ class ProductCategoryTaxController
     /**
      * @var CreateProductCategoryTaxService
      */
-    private CreateProductCategoryTaxService $createProductCategoryService;
+    private CreateProductCategoryTaxService $createTaxService;
+
+    /**
+     * @var UpdateProductCategoryTaxService
+     */
+    private UpdateProductCategoryTaxService $updateTaxService;
 
     /**
      */
-    public function __construct() { // Todo: Inject dependencies
+    public function __construct()
+    { // Todo: Inject dependencies
         $this->repository = new ProductCategoryTaxRepository();
-        $this->createProductCategoryService = new CreateProductCategoryTaxService($this->repository);
+        $this->createTaxService = new CreateProductCategoryTaxService($this->repository);
+        $this->updateTaxService = new UpdateProductCategoryTaxService($this->repository);
     }
 
     /**
@@ -61,7 +71,7 @@ class ProductCategoryTaxController
                 percent: $data['percent'] ?? 0,
             );
 
-            $this->createProductCategoryService->execute($input);
+            $this->createTaxService->execute($input);
         } catch (ValidationException $e) {
             $response->getBody()->write(json_encode([
                 'message' => $e->getMessage(),
@@ -91,5 +101,39 @@ class ProductCategoryTaxController
         }
         $response->getBody()->write(json_encode($tax));
         return $response->withStatus(200);
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     * @return ResponseInterface
+     */
+    public function update(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+        $body = $request->getParsedBody();
+
+        $id = (int)$args['id'];
+
+        try {
+            $this->updateTaxService->execute(new UpdateProductCategoryTaxDTO(
+                id: $id,
+                description: $body['description'] ?? '',
+                percent: $body['percent'] ?? 0,
+            ));
+        } catch (ValidationException $e) {
+            $response->getBody()->write(json_encode([
+                'message' => $e->getMessage(),
+                'errors' => $e->getErrors()
+            ]));
+            return $response->withStatus(400);
+        } catch (Throwable $e) {
+            $response->getBody()->write(json_encode([
+                'message' => 'Internal server error',
+            ]));
+            return $response->withStatus(500);
+        }
+
+        return $response->withStatus(204);
     }
 }

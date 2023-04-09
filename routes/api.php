@@ -18,6 +18,7 @@ return function (Slim\Routing\RouteCollectorProxy $group) {
                 $group->get('', [ProductCategoryTaxController::class, 'index']);
                 $group->get('/{id}', [ProductCategoryTaxController::class, 'show']);
                 $group->post('', [ProductCategoryTaxController::class, 'store']);
+                $group->put('/{id}', [ProductCategoryTaxController::class, 'update']);
             });
             $group->get('', [ProductCategoryController::class, 'index']);
             $group->get('/{id}', [ProductCategoryController::class, 'show']);

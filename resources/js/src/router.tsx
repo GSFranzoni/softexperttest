@@ -17,6 +17,7 @@ import UserCreatePage from "./Pages/UserCreate";
 import RoleGuard from "./Guards/RoleGuard";
 import { UserRole } from "./Types";
 import CartProvider from "./Contexts/CartContext";
+import TaxEditPage from "./Pages/TaxEdit";
 
 const router = createBrowserRouter([
   {
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
           {
             path: 'create',
             element: <TaxCreatePage/>,
+          },
+          {
+            path: ':id/edit',
+            element: <TaxEditPage/>,
           },
           {
             path: ':id',

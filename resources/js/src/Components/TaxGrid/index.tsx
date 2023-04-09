@@ -1,11 +1,11 @@
-import { ProductCategoryTax } from "../../Types";
+import { FormScope, ProductCategoryTax } from "../../Types";
 import { HStack, IconButton, Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { getTaxes } from "../../Services/Taxes";
 import { Icon } from "@iconify/react";
 
 type TaxGridProps = {
-  onTaxClick: (tax: ProductCategoryTax) => void;
+  onTaxClick: (tax: ProductCategoryTax, scope: FormScope) => void;
 }
 
 const TaxGrid = ({ onTaxClick }: TaxGridProps) => {
@@ -26,13 +26,24 @@ const TaxGrid = ({ onTaxClick }: TaxGridProps) => {
         </Thead>
         <Tbody>
           {taxes.map((tax) => (
-            <Tr key={tax.id} onClick={() => onTaxClick(tax)}
+            <Tr key={tax.id} onClick={() => onTaxClick(tax, FormScope.VIEW)}
                 _hover={{ cursor: 'pointer', opacity: 0.8 }}>
               <Th>{tax.id}</Th>
               <Th>{tax.description}</Th>
               <Th>{Intl.NumberFormat('en-US', { style: 'percent' }).format(tax.percent)}</Th>
               <Th>
                 <HStack>
+                  <IconButton
+                    aria-label={'edit tax'}
+                    icon={<Icon icon={'mdi:pencil'} width={20} height={20}/>}
+                    size={'sm'}
+                    colorScheme={'blue'}
+                    variant={'link'}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onTaxClick(tax, FormScope.EDIT)
+                    }}
+                  />
                   <IconButton
                     aria-label={'delete tax'}
                     icon={<Icon icon={'mdi:delete'} width={20} height={20}/>}
@@ -41,7 +52,7 @@ const TaxGrid = ({ onTaxClick }: TaxGridProps) => {
                     variant={'link'}
                     onClick={(e) => {
                       e.stopPropagation();
-                      console.log('delete tax')
+                      onTaxClick(tax, FormScope.DELETE)
                     }}
                   />
                 </HStack>

@@ -4,6 +4,7 @@ import CustomBreadcrumb from "../../Components/CustomBreadcrumb";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import TaxGrid from "../../Components/TaxGrid";
+import { FormScope } from "../../Types";
 
 const TaxList = () => {
   const navigate = useNavigate();
@@ -26,8 +27,19 @@ const TaxList = () => {
           path: '/taxes',
         },
       ]}/>
-      <TaxGrid onTaxClick={(tax) => {
-        navigate(`/taxes/${tax.id}`)
+      <TaxGrid onTaxClick={(tax, scope) => {
+        const actions = {
+          [FormScope.VIEW]: () => {
+            navigate(`/taxes/${tax.id}`)
+          },
+          [FormScope.EDIT]: () => {
+            navigate(`/taxes/${tax.id}/edit`)
+          },
+          [FormScope.DELETE]: () => {
+            console.log('delete')
+          }
+        }
+        actions[scope.toString() as keyof typeof actions]()
       }}/>
     </VStack>
   )

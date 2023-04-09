@@ -14,3 +14,8 @@ export const createTax = async (tax: ProductCategoryTax) => axios.post('/product
 })
   .then((response) => response.data)
   .catch((error) => ({}));
+
+export const updateTax = async (tax: ProductCategoryTax) => axios.put(`/products/categories/taxes/${tax.id}`, {
+  ...tax,
+  percent: tax.percent / 100
+})
