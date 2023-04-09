@@ -20,5 +20,25 @@ abstract class AbstractRepository extends EntityRepository
         parent::__construct($entityManager, $entityManager->getClassMetadata($this->getEntityClass()));
     }
 
+    /**
+     * @param object $entity
+     * @return void
+     */
+    public function save(object $entity): void
+    {
+        $this->_em->persist($entity);
+        $this->_em->flush();
+    }
+
+    /**
+     * @param object $entity
+     * @return void
+     */
+    public function delete(object $entity): void
+    {
+        $this->_em->remove($entity);
+        $this->_em->flush();
+    }
+
     protected abstract function getEntityClass(): string;
 }
