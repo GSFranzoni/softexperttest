@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\Persistence\Entity\ProductCategory;
 use App\DataTransferObject\CreateProductCategoryDTO;
+use App\Persistence\Entity\ProductCategory;
 use App\Persistence\Entity\ProductCategoryTax;
 use App\Persistence\Repository\ProductCategoryRepository;
 use App\Persistence\Repository\ProductCategoryTaxRepository;
@@ -26,7 +26,7 @@ class CreateProductCategoryService
     public function execute(CreateProductCategoryDTO $input): void
     {
         /** @var ProductCategoryTax $tax */
-        $tax = $this->productCategoryTaxRepository->getById($input->taxId);
+        $tax = $this->productCategoryTaxRepository->find($input->taxId);
         if (empty($tax)) {
             throw new EntityNotFoundException('Tax not found');
         }

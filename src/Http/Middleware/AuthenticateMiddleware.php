@@ -29,6 +29,11 @@ class AuthenticateMiddleware implements MiddlewareInterface
         $this->userRepository = new UserRepository();
     }
 
+    /**
+     * @param Request $request
+     * @param RequestHandler $handler
+     * @return Response
+     */
     public function process(Request $request, RequestHandler $handler): Response
     {
         $response = new \Slim\Psr7\Response();
@@ -45,7 +50,7 @@ class AuthenticateMiddleware implements MiddlewareInterface
             $payload = JWT::decode($token, new Key(getenv('JWT_SECRET'), getenv('JWT_ALGORITHM')));
 
             /** @var User $user */
-            $user = $this->userRepository->getById($payload->user);
+            $user = $this->userRepository->find($payload->user);
 
             if (empty($user)) {
                 return $response->withStatus(401);

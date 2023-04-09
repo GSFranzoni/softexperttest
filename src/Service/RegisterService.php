@@ -23,7 +23,7 @@ class RegisterService
      */
     public function execute(RegisterDTO $register): void
     {
-        $existingUser = $this->repository->findByEmail($register->email);
+        $existingUser = $this->repository->findOneBy(['email' => $register->email]);
         if (!empty($existingUser)) {
             throw new UserAlreadyExistsException("User already exists");
         }

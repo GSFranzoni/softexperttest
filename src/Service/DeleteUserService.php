@@ -28,7 +28,7 @@ class DeleteUserService
      */
     public function execute(string $id): void
     {
-        $user = $this->repository->getById($id);
+        $user = $this->repository->find($id);
 
         if (empty($user)) {
             throw new ResourceNotFoundException("User not found");

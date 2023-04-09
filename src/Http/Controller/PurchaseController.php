@@ -52,7 +52,7 @@ class PurchaseController
      */
     public function index(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $purchases = $this->purchaseRepository->getAll();
+        $purchases = $this->purchaseRepository->findAll();
         $response->getBody()->write(json_encode([
             'purchases' => $purchases,
         ]));

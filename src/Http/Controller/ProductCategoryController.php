@@ -8,8 +8,6 @@ use App\Persistence\Repository\ProductCategoryRepository;
 use App\Persistence\Repository\ProductCategoryTaxRepository;
 use App\Service\CreateProductCategoryService;
 use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\TransactionRequiredException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -46,7 +44,7 @@ class ProductCategoryController
      */
     public function index(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $categories = $this->repository->getAll();
+        $categories = $this->repository->findAll();
         $response->getBody()->write(json_encode([
             'categories' => $categories,
         ]));
@@ -58,14 +56,11 @@ class ProductCategoryController
      * @param ResponseInterface $response
      * @param array $args
      * @return ResponseInterface
-     * @throws ORMException
-     * @throws OptimisticLockException
-     * @throws TransactionRequiredException
      */
     public function show(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $id = (int) $args['id'];
-        $product = $this->repository->getById($id);
+        $id = (int)$args['id'];
+        $product = $this->repository->find($id);
         $response->getBody()->write(json_encode($product));
         return $response->withStatus(200);
     }

@@ -44,7 +44,7 @@ class ProductController
      */
     public function index(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $products = $this->productRepository->getAll();
+        $products = $this->productRepository->findAll();
         $response->getBody()->write(json_encode([
             'products' => $products,
         ]));

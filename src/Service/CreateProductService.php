@@ -31,7 +31,7 @@ class CreateProductService
     public function execute(CreateProductDTO $input): void
     {
         /** @var ?ProductCategory $category */
-        $category = $this->productCategoryRepository->getById($input->productCategoryId);
+        $category = $this->productCategoryRepository->find($input->productCategoryId);
         if (is_null($category)) {
             throw new EntityNotFoundException("Category not found");
         }

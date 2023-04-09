@@ -11,9 +11,6 @@ use App\Persistence\Enums\UserRole;
 use App\Persistence\Repository\UserRepository;
 use App\Service\LoginService;
 use App\Service\RegisterService;
-use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\TransactionRequiredException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Psr\Http\Message\ResponseInterface;
@@ -115,9 +112,6 @@ class AuthController
      * @param ResponseInterface $response
      * @param array $args
      * @return ResponseInterface
-     * @throws ORMException
-     * @throws OptimisticLockException
-     * @throws TransactionRequiredException
      */
     public function me(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
@@ -126,7 +120,7 @@ class AuthController
         $payload = JWT::decode($token, new Key(getenv('JWT_SECRET'), getenv('JWT_ALGORITHM')));
 
         /** @var User $user */
-        $user = $this->userRepository->getById($payload->user);
+        $user = $this->userRepository->find($payload->user);
 
         $response->getBody()->write(
             json_encode($user)

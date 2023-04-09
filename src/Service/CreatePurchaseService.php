@@ -37,7 +37,7 @@ class CreatePurchaseService
         $this->purchaseRepository->save($purchase);
         foreach ($input->products as $purchasedProductDTO) {
             /** @var ?Product $product */
-            $product = $this->productRepository->getById($purchasedProductDTO->id);
+            $product = $this->productRepository->find($purchasedProductDTO->id);
             if (is_null($product)) {
                 throw new EntityNotFoundException("Product $purchasedProductDTO->id not found");
             }

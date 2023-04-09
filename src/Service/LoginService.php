@@ -23,7 +23,7 @@ class LoginService
      */
     public function execute(LoginDTO $login): string
     {
-        $user = $this->repository->findByEmail($login->email);
+        $user = $this->repository->findOneBy(['email' => $login->email]);
         if (empty($user)) {
             throw new ResourceNotFoundException("User not found");
         }

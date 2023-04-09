@@ -7,8 +7,6 @@ use App\Exception\ValidationException;
 use App\Persistence\Repository\ProductCategoryTaxRepository;
 use App\Service\CreateProductCategoryTaxService;
 use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\TransactionRequiredException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -39,7 +37,7 @@ class ProductCategoryTaxController
      */
     public function index(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $taxes = $this->repository->getAll();
+        $taxes = $this->repository->findAll();
         $response->getBody()->write(json_encode([
             'taxes' => $taxes,
         ]));
@@ -80,14 +78,11 @@ class ProductCategoryTaxController
      * @param ResponseInterface $response
      * @param array $args
      * @return ResponseInterface
-     * @throws ORMException
-     * @throws OptimisticLockException
-     * @throws TransactionRequiredException
      */
     public function show(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $id = (int)$args['id'];
-        $tax = $this->repository->getById($id);
+        $tax = $this->repository->find($id);
         if (!$tax) {
             $response->getBody()->write(json_encode([
                 'message' => 'Tax not found',
