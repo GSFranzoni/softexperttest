@@ -189,5 +189,7 @@ ___
 ## Demo
 A demo of this project is available at http://31.220.20.251:3000
 ___
-#### License
-This project is licensed under the MIT License.
+## Default credentials
+You can use the following credentials to login:
+- **Email:** admin@softexpert.com
+- **Password:** admin
