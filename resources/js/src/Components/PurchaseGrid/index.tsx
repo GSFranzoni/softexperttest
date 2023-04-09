@@ -1,4 +1,4 @@
-import { Purchase } from "../../Types";
+import { FormScope, Purchase } from "../../Types";
 import { Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { formatPrice } from "../../Utils/Money";
@@ -6,7 +6,7 @@ import { formatDate } from "../../Utils/Date";
 import { getPurchases } from "../../Services/Purchases";
 
 type PurchaseGridProps = {
-  onPurchaseClick: (purchase: Purchase) => void;
+  onPurchaseClick: (purchase: Purchase, scope: FormScope) => void
 }
 
 const PurchaseGrid = ({ onPurchaseClick }: PurchaseGridProps) => {
@@ -27,7 +27,7 @@ const PurchaseGrid = ({ onPurchaseClick }: PurchaseGridProps) => {
         </Thead>
         <Tbody>
           {purchases.map((purchase) => (
-            <Tr key={purchase.id} onClick={() => onPurchaseClick(purchase)}
+            <Tr key={purchase.id} onClick={() => onPurchaseClick(purchase, FormScope.VIEW)}
                 _hover={{ cursor: 'pointer', opacity: 0.8 }}>
               <Th>{purchase.id}</Th>
               <Th>{formatPrice(purchase.total)}</Th>

@@ -29,6 +29,7 @@ return function (Slim\Routing\RouteCollectorProxy $group) {
     $group->group('/purchases', function (Slim\Routing\RouteCollectorProxy $group) {
         $group->get('', [PurchaseController::class, 'index']);
         $group->post('', [PurchaseController::class, 'store']);
+        $group->get('/{id}', [PurchaseController::class, 'show']);
     })->add(new AuthenticateMiddleware(UserRole::REGULAR));
 
     $group->group('/users', function (Slim\Routing\RouteCollectorProxy $group) {

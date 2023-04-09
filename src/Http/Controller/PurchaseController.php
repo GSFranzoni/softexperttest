@@ -99,4 +99,25 @@ class PurchaseController
 
         return $response->withStatus(201);
     }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     * @return ResponseInterface
+     */
+    public function show(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+        $purchase = $this->purchaseRepository->find($args['id']);
+        if (empty($purchase)) {
+            $response->getBody()->write(json_encode([
+                'message' => 'Purchase not found',
+            ]));
+            return $response->withStatus(404);
+        }
+        $response->getBody()->write(
+            json_encode($purchase)
+        );
+        return $response->withStatus(200);
+    }
 }

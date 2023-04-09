@@ -22,6 +22,8 @@ export type Product = {
 
 export type PurchasedProduct = Product & {
   quantity: number;
+  tax?: number;
+  total?: number;
 }
 
 export type Purchase = {

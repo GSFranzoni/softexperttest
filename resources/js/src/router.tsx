@@ -18,6 +18,7 @@ import RoleGuard from "./Guards/RoleGuard";
 import { UserRole } from "./Types";
 import CartProvider from "./Contexts/CartContext";
 import TaxEditPage from "./Pages/TaxEdit";
+import PurchaseView from "./Pages/PurchaseView";
 
 const router = createBrowserRouter([
   {
@@ -91,8 +92,8 @@ const router = createBrowserRouter([
             element: <PurchaseList/>,
           },
           {
-            path: 'create',
-            element: null
+            path: ':id',
+            element: <PurchaseView/>,
           }
         ]
       },

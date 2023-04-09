@@ -1,11 +1,11 @@
-import { ProductOnCard } from "../../Contexts/CartContext";
 import { Box, Card, CardProps, HStack, IconButton, Image, Text, VStack } from "@chakra-ui/react";
 import React, { useMemo } from "react";
 import { formatPrice } from "../../Utils/Money";
 import { Icon } from "@iconify/react";
+import { PurchasedProduct } from "../../Types";
 
 const ProductOnCartCard = ({ product, onRemove, onIncrease, onDecrease, ...props }: {
-                             product: ProductOnCard;
+                             product: PurchasedProduct;
                              onRemove: () => void;
                              onIncrease: () => void;
                              onDecrease: () => void;
@@ -16,7 +16,8 @@ const ProductOnCartCard = ({ product, onRemove, onIncrease, onDecrease, ...props
   return (
     <Card {...props}>
       <HStack>
-        <Image src={product.image || 'https://via.placeholder.com/150'} alt={product.name} width={'80px'}/>
+        <Image src={product.image || 'https://via.placeholder.com/150'} alt={product.name} width={'80px'}
+               borderRadius={'md'}/>
         <VStack alignItems={'start'} spacing={1} flex={1}>
           <Text fontSize={'xs'} color={'gray.500'}>{product.name}</Text>
           <HStack>

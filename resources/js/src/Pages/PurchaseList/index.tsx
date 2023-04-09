@@ -3,6 +3,7 @@ import CustomBreadcrumb from "../../Components/CustomBreadcrumb";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import PurchaseGrid from "../../Components/PurchaseGrid";
+import { FormScope } from "../../Types";
 
 const PurchaseList = () => {
   const navigate = useNavigate();
@@ -17,7 +18,11 @@ const PurchaseList = () => {
           path: '/purchases',
         },
       ]}/>
-      <PurchaseGrid onPurchaseClick={console.log}/>
+      <PurchaseGrid onPurchaseClick={(purchase, scope) => {
+        if (scope === FormScope.VIEW) {
+          navigate('/purchases/' + purchase.id)
+        }
+      }}/>
     </VStack>
   )
 }
