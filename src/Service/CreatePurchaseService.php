@@ -3,16 +3,14 @@
 namespace App\Service;
 
 use App\DataTransferObject\CreatePurchaseDTO;
+use App\Exception\DomainException;
+use App\Exception\ResourceNotFoundException;
 use App\Persistence\Entity\Product;
 use App\Persistence\Entity\Purchase;
 use App\Persistence\Entity\PurchasedProduct;
 use App\Persistence\Repository\ProductRepository;
 use App\Persistence\Repository\PurchasedProductRepository;
 use App\Persistence\Repository\PurchaseRepository;
-use Doctrine\ORM\EntityNotFoundException;
-use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\TransactionRequiredException;
 
 class CreatePurchaseService
 {
@@ -26,23 +24,20 @@ class CreatePurchaseService
     /**
      * @param CreatePurchaseDTO $input
      * @return void
-     * @throws EntityNotFoundException
-     * @throws ORMException
-     * @throws OptimisticLockException
-     * @throws TransactionRequiredException
+     * @throws DomainException
+     * @throws ResourceNotFoundException
      */
     public function execute(CreatePurchaseDTO $input): void
     {
         $purchase = new Purchase();
-        $this->purchaseRepository->save($purchase);
         foreach ($input->products as $purchasedProductDTO) {
             /** @var ?Product $product */
             $product = $this->productRepository->find($purchasedProductDTO->id);
             if (is_null($product)) {
-                throw new EntityNotFoundException("Product $purchasedProductDTO->id not found");
+                throw new ResourceNotFoundException("Product $purchasedProductDTO->id not found");
             }
             if ($product->getStock() < $purchasedProductDTO->quantity) {
-                throw new EntityNotFoundException("Product $purchasedProductDTO->id has insufficient stock");
+                throw new DomainException("Product $purchasedProductDTO->id has insufficient stock");
             }
             $category = $product->getCategory();
             $tax = $category->getTax();
@@ -58,6 +53,7 @@ class CreatePurchaseService
             $purchase->setTotal($purchase->getTotal() + $product->getPrice() * $purchasedProductDTO->quantity);
             $purchase->setTax($purchase->getTax() + $purchasedProduct->getTax());
             $this->purchasedProductRepository->save($purchasedProduct);
+            $this->productRepository->save($product);
         }
         $this->purchaseRepository->save($purchase);
     }

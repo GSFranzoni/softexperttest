@@ -3,11 +3,11 @@
 namespace App\Service;
 
 use App\DataTransferObject\CreateProductDTO;
+use App\Exception\ResourceNotFoundException;
 use App\Persistence\Entity\Product;
 use App\Persistence\Entity\ProductCategory;
 use App\Persistence\Repository\ProductCategoryRepository;
 use App\Persistence\Repository\ProductRepository;
-use Doctrine\ORM\EntityNotFoundException;
 
 class CreateProductService
 {
@@ -20,14 +20,14 @@ class CreateProductService
     /**
      * @param CreateProductDTO $input
      * @return void
-     * @throws EntityNotFoundException
+     * @throws ResourceNotFoundException
      */
     public function execute(CreateProductDTO $input): void
     {
         /** @var ?ProductCategory $category */
         $category = $this->productCategoryRepository->find($input->productCategoryId);
         if (is_null($category)) {
-            throw new EntityNotFoundException("Category not found");
+            throw new ResourceNotFoundException("Category not found");
         }
         $product = new Product();
         $product->setName($input->name);

@@ -1,8 +1,8 @@
 import { ProductCategory, Purchase } from "../../Types";
 import axios from "axios";
 
-export const getCategories = async () => axios.get<{ purchases: Purchase[] }>('/products/categories')
-  .then((response) => response.data.purchases)
+export const getCategories = async () => axios.get<{ categories: ProductCategory[] }>('/products/categories')
+  .then((response) => response.data.categories)
   .catch((error) => ([]));
 
 export const createCategory = async (category: ProductCategory) => axios.post('/products/categories', {

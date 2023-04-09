@@ -17,7 +17,6 @@ class CreateProductCategoryTaxService
     /**
      * @param CreateProductCategoryTaxDTO $input
      * @return void
-     * @throws ORMException
      */
     public function execute(CreateProductCategoryTaxDTO $input): void
     {

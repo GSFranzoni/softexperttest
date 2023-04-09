@@ -5,11 +5,6 @@
 /bootstrap/cache/
 /storage/
 
-# PHPUnit
-/phpunit.xml
-/phpunit.xml.dist
-/tests/
-
 # IDEs and editors
 /.idea/
 /.vscode/
