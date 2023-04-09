@@ -145,11 +145,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, isLoading, onCancel
         leastDestructiveRef={cancelRef}
         motionPreset={'slideInBottom'}
         isCentered
+        size={'2xl'}
       >
         <AlertDialogOverlay/>
         <AlertDialogContent>
           <AlertDialogHeader fontSize="lg" fontWeight="bold">
-            Select a tax
+            Select a category
           </AlertDialogHeader>
           <AlertDialogBody>
             <CategoryGrid onCategoryClick={(category) => {

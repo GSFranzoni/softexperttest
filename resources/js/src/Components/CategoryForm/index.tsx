@@ -101,6 +101,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSubmit, onCancel, default
         leastDestructiveRef={cancelRef}
         motionPreset={'slideInBottom'}
         isCentered
+        size={'2xl'}
       >
         <AlertDialogOverlay/>
         <AlertDialogContent>
