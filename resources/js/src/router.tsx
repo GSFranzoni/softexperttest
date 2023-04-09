@@ -12,6 +12,7 @@ import LoginPage from "./Pages/LoginPage";
 import AuthProvider from "./Contexts/AuthContext";
 import HomePage from "./Pages/HomePage";
 import UserList from "./Pages/UserList";
+import UserView from "./Pages/UserView";
 
 const router = createBrowserRouter([
   {
@@ -93,7 +94,7 @@ const router = createBrowserRouter([
           },
           {
             path: ':id',
-            element: null
+            element: <UserView/>,
           },
         ]
       }

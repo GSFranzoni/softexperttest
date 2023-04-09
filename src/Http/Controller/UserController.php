@@ -5,6 +5,9 @@ namespace App\Http\Controller;
 use App\Exception\DomainException;
 use App\Persistence\Repository\UserRepository;
 use App\Service\DeleteUserService;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\TransactionRequiredException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
@@ -38,11 +41,21 @@ class UserController
         return $response->withStatus(200);
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     * @return ResponseInterface
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws TransactionRequiredException
+     */
     public function show(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $id = $args['id'];
+        $user = $this->userRepository->getById($id);
         $response->getBody()->write(
-            json_encode([])
+            json_encode($user)
         );
         return $response->withStatus(200);
     }

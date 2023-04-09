@@ -5,7 +5,7 @@ export const getUsers = async () => axios.get<{ users: User[] }>('/users')
   .then((response) => response.data.users)
   .catch((error) => ([]));
 
-export const getUser = async (id: number) => axios.get<User>(`/users/${id}`)
+export const getUser = async ({ id }: Pick<User, 'id'>) => axios.get<User>(`/users/${id}`)
   .then((response) => response.data)
 
 export const deleteUser = async ({ id }: Pick<User, 'id'>) => axios.delete(`/users/${id}`)

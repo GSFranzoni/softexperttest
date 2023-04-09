@@ -3,56 +3,52 @@ import { Icon } from "@iconify/react";
 import CustomBreadcrumb from "../../Components/CustomBreadcrumb";
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import TaxForm from "../../Components/TaxForm";
 import { FormScope } from "../../Types";
 import { useQuery } from "@tanstack/react-query";
-import { getTax } from "../../Services/Taxes";
+import { getUser } from "../../Services/Users";
+import UserForm from "../../Components/UserForm";
 
-const TaxView = () => {
+const UserView = () => {
   const navigate = useNavigate();
-  const id = useParams().id
-  const { data: tax, isLoading } = useQuery([ 'taxes', id ], () => getTax(parseInt(id as string)), {
+  const id = useParams().id as string
+  const { data: user, isLoading } = useQuery([ 'users', id ], () => getUser({ id: parseInt(id) }), {
     enabled: !!id,
   })
   return (
     <VStack alignItems={'start'} gap={3} width={'100%'}>
       <HStack width={'100%'} justifyContent={'space-between'} py={1}>
-        <Text fontSize={'2xl'} fontWeight={'bold'}>Taxes</Text>
+        <Text fontSize={'2xl'} fontWeight={'bold'}>Users</Text>
         <IconButton
           aria-label={'create'}
           icon={<Icon icon={'mdi:add'} width={20} height={20}/>}
           size={'sm'}
           onClick={() => {
-            navigate('/taxes/create')
+            navigate('/users/create')
           }}
         />
       </HStack>
       <CustomBreadcrumb crumbs={[
         {
-          label: 'Taxes',
-          path: '/taxes',
+          label: 'Users',
+          path: '/users',
         },
         {
           label: 'View',
-          path: '/taxes/{id}',
+          path: '/users/{id}',
         }
       ]}/>
       {isLoading && <Progress width={'100%'} isIndeterminate/>}
-      {tax && (
-        <TaxForm
+      {user && (
+        <UserForm
           scope={FormScope.VIEW}
-          defaultValues={{
-            id: tax.id,
-            description: tax.description,
-            percent: tax.percent * 100,
-          }}
+          defaultValues={user}
           onSubmit={() => {
           }}
-          onCancel={() => navigate('/taxes')}
+          onCancel={() => navigate('/users')}
         />
       )}
     </VStack>
   )
 }
 
-export default TaxView
+export default UserView
