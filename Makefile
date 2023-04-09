@@ -47,3 +47,6 @@ exec: ## Start bash
 
 test: ## Run tests
 	docker-compose exec softexpert_server vendor/bin/phpunit tests --testdox --colors=always
+
+migrations: ## Run migrations
+	docker-compose exec softexpert_server vendor/bin/doctrine-migrations migrate
