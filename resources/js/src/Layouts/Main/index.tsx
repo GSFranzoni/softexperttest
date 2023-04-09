@@ -170,8 +170,6 @@ export default function MainLayout() {
                   </VStack>
                   <br/>
                   <MenuDivider/>
-                  <MenuItem>Your Servers</MenuItem>
-                  <MenuItem>Account Settings</MenuItem>
                   <MenuItem onClick={() => {
                     logout()
                   }}>Logout</MenuItem>
