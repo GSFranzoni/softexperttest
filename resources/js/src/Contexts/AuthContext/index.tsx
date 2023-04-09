@@ -72,14 +72,6 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     if (status === AuthStatus.UNAUTHENTICATED) {
-      toast({
-        title: 'Unauthorized',
-        description: 'You need to login',
-        status: 'error',
-        duration: 2000,
-        icon: <LockIcon/>,
-        isClosable: true,
-      })
       updateLocalStorageToken(null)
     }
   }, [ status ])
