@@ -13,7 +13,8 @@ axios.interceptors.response.use(
       updateLocalStorageToken(null)
       window.location.href = '/auth/login';
     }
-  }
+    return Promise.reject(error);
+  },
 );
 
 export const updateLocalStorageToken = (token: string | null) => {

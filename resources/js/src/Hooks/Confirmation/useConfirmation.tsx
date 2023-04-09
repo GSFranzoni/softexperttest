@@ -12,7 +12,7 @@ import React from "react";
 
 type useConfirmationProps<T> = {
   onConfirm: (context: T) => void;
-  onCancel: (context: T) => void;
+  onCancel?: (context: T) => void;
   title?: string;
   description?: string;
   confirmLabel?: string;
@@ -29,7 +29,7 @@ const useConfirmation = <T, >({
                                 confirmLabel = 'Confirm',
                                 cancelLabel = 'Cancel',
                               }: useConfirmationProps<T>) => {
-  const cancelRef = React.useRef();
+  const cancelRef = React.useRef() as React.MutableRefObject<HTMLButtonElement>;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -57,13 +57,13 @@ const useConfirmation = <T, >({
           <AlertDialogFooter>
             <Button ref={cancelRef} onClick={() => {
               onClose();
-              onCancel(context);
+              onCancel(context as T);
             }}>
               {cancelLabel}
             </Button>
             <Button colorScheme='red' onClick={() => {
               onClose();
-              onConfirm(context);
+              onConfirm(context as T);
             }} ml={3}>
               {confirmLabel}
             </Button>

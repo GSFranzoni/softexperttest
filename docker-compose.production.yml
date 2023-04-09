@@ -1,0 +1,61 @@
+version: '3.1'
+
+networks:
+    internal:
+        driver: bridge
+
+services:
+    softexpert_mysql:
+        container_name: softexpert_mysql
+        image: mysql:5.7
+        working_dir: /app
+        volumes:
+            - '.:/app'
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+            - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+        ports:
+            - '3306:3306'
+        networks:
+            - internal
+
+    softexpert_server:
+        image: webdevops/php-nginx:8.2
+        container_name: softexpert_server
+        networks:
+            - internal
+        working_dir: /app
+        volumes:
+            - .:/app
+            - ./.docker/nginx/custom.conf:/opt/docker/etc/nginx/vhost.common.d/custom.conf
+            - ./.docker/php/php.ini:/usr/local/etc/php/conf.d/php.ini
+        depends_on:
+            - softexpert_mysql
+        environment:
+            - WEB_DOCUMENT_ROOT=/app/public
+            - PHP_DISPLAY_ERRORS=0
+            - PHP_MEMORY_LIMIT=2048M
+            - PHP_MAX_EXECUTION_TIME=300
+            - PHP_POST_MAX_SIZE=500M
+            - PHP_UPLOAD_MAX_FILESIZE=500M
+        env_file:
+            - .env
+        expose:
+            - 9090
+        ports:
+            - "8000:80"
+
+    softexpert_app:
+        container_name: softexpert_app
+        image: node:16-alpine
+        volumes:
+            - ./resources/js:/app
+        working_dir: /app
+        command: sh -c "yarn install && yarn build && yarn global add serve && serve -s dist -l 3000"
+        ports:
+            - "3000:3000"
+        networks:
+            - internal
