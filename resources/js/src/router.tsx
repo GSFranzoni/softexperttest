@@ -13,6 +13,7 @@ import AuthProvider from "./Contexts/AuthContext";
 import HomePage from "./Pages/HomePage";
 import UserList from "./Pages/UserList";
 import UserView from "./Pages/UserView";
+import UserCreatePage from "./Pages/UserCreate";
 
 const router = createBrowserRouter([
   {
@@ -90,7 +91,7 @@ const router = createBrowserRouter([
           },
           {
             path: 'create',
-            element: null
+            element: <UserCreatePage/>,
           },
           {
             path: ':id',
