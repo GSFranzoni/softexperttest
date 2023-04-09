@@ -11,6 +11,7 @@
         }
     ],
     "require": {
+        "php": "8.2",
         "slim/slim": "4.*",
         "slim/psr7": "^1.6",
         "doctrine/orm": "^2.14",
