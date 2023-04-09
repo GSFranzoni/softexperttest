@@ -19,6 +19,8 @@ class AuthenticateMiddleware implements MiddlewareInterface
 
     const TOKEN_PREFIX = 'Bearer ';
 
+    const USER_ATTRIBUTE = 'user';
+
     /**
      * @var UserRepository
      */
@@ -59,6 +61,8 @@ class AuthenticateMiddleware implements MiddlewareInterface
             if ($user->getRole() !== $this->role && $this->role !== null) {
                 return $response->withStatus(403);
             }
+
+            $request = $request->withAttribute(self::USER_ATTRIBUTE, $user);
         }
         catch (Throwable $t) {
             return $response->withStatus(401);

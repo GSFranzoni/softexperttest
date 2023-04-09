@@ -6,13 +6,10 @@ use App\DataTransferObject\LoginDTO;
 use App\DataTransferObject\RegisterDTO;
 use App\Exception\DomainException;
 use App\Http\Middleware\AuthenticateMiddleware;
-use App\Persistence\Entity\User;
 use App\Persistence\Enums\UserRole;
 use App\Persistence\Repository\UserRepository;
 use App\Service\LoginService;
 use App\Service\RegisterService;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
@@ -115,12 +112,7 @@ class AuthController
      */
     public function me(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $token = substr($request->getHeaderLine(AuthenticateMiddleware::TOKEN_HEADER), strlen(AuthenticateMiddleware::TOKEN_PREFIX));
-
-        $payload = JWT::decode($token, new Key(getenv('JWT_SECRET'), getenv('JWT_ALGORITHM')));
-
-        /** @var User $user */
-        $user = $this->userRepository->find($payload->user);
+        $user = $request->getAttribute(AuthenticateMiddleware::USER_ATTRIBUTE);
 
         $response->getBody()->write(
             json_encode($user)

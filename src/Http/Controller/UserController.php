@@ -3,6 +3,8 @@
 namespace App\Http\Controller;
 
 use App\Exception\DomainException;
+use App\Http\Middleware\AuthenticateMiddleware;
+use App\Persistence\Entity\User;
 use App\Persistence\Repository\UserRepository;
 use App\Service\DeleteUserService;
 use Psr\Http\Message\ResponseInterface;
@@ -80,8 +82,10 @@ class UserController
     public function destroy(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $id = $args['id'];
+        /** @var User $loggedUser */
+        $loggedUser = $request->getAttribute(AuthenticateMiddleware::USER_ATTRIBUTE);
         try {
-            $this->deleteUserService->execute($id);
+            $this->deleteUserService->execute($id, $loggedUser->getId());
         } catch (DomainException $e) {
             $response->getBody()->write(
                 json_encode([

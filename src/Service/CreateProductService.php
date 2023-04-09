@@ -8,9 +8,6 @@ use App\Persistence\Entity\ProductCategory;
 use App\Persistence\Repository\ProductCategoryRepository;
 use App\Persistence\Repository\ProductRepository;
 use Doctrine\ORM\EntityNotFoundException;
-use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\TransactionRequiredException;
 
 class CreateProductService
 {
@@ -24,9 +21,6 @@ class CreateProductService
      * @param CreateProductDTO $input
      * @return void
      * @throws EntityNotFoundException
-     * @throws ORMException
-     * @throws OptimisticLockException
-     * @throws TransactionRequiredException
      */
     public function execute(CreateProductDTO $input): void
     {
