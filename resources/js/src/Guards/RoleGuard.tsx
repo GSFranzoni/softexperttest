@@ -12,22 +12,20 @@ type RoleGuardProps = {
 const RoleGuard: React.FC<RoleGuardProps> = ({ role }) => {
   const { user } = useContext(AuthContext);
 
-  if (user?.role !== role) {
-    return <Alert
-      status={'error'}
-      variant={'solid'}
-      gap={2}
-    >
-      <Icon icon={'mdi:lock'} width={20} height={20}/>
-      <AlertTitle>
-        You don't have permission to access this page
-      </AlertTitle>
-    </Alert>
+  if (user?.role === role) {
+    return <Outlet/>
   }
 
-  return (
-    <Outlet/>
-  )
+  return <Alert
+    status={'error'}
+    variant={'solid'}
+    gap={2}
+  >
+    <Icon icon={'mdi:lock'} width={20} height={20}/>
+    <AlertTitle>
+      You don't have permission to access this page
+    </AlertTitle>
+  </Alert>
 }
 
 export default RoleGuard;
