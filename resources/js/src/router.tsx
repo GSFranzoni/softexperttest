@@ -14,6 +14,8 @@ import HomePage from "./Pages/HomePage";
 import UserList from "./Pages/UserList";
 import UserView from "./Pages/UserView";
 import UserCreatePage from "./Pages/UserCreate";
+import RoleGuard from "./Guards/RoleGuard";
+import { UserRole } from "./Types";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +30,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/products',
+        element: <RoleGuard role={UserRole.REGULAR}/>,
         children: [
           {
             path: '',
@@ -41,6 +44,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/categories',
+        element: <RoleGuard role={UserRole.REGULAR}/>,
         children: [
           {
             path: '',
@@ -54,6 +58,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/taxes',
+        element: <RoleGuard role={UserRole.REGULAR}/>,
         children: [
           {
             path: '',
@@ -71,6 +76,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/purchases',
+        element: <RoleGuard role={UserRole.REGULAR}/>,
         children: [
           {
             path: '',
@@ -84,6 +90,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/users',
+        element: <RoleGuard role={UserRole.ADMIN}/>,
         children: [
           {
             path: '',
