@@ -16,12 +16,15 @@ import UserView from "./Pages/UserView";
 import UserCreatePage from "./Pages/UserCreate";
 import RoleGuard from "./Guards/RoleGuard";
 import { UserRole } from "./Types";
+import CartProvider from "./Contexts/CartContext";
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <AuthProvider>
-      <MainLayout/>
+      <CartProvider>
+        <MainLayout/>
+      </CartProvider>
     </AuthProvider>,
     children: [
       {
