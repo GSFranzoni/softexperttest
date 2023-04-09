@@ -4,7 +4,6 @@ import React, { createContext, PropsWithChildren, useEffect, useState } from "re
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { login as loginRequest, me } from "../../Services/Auth";
 import { useToast } from "@chakra-ui/react";
-import { LockIcon } from "@chakra-ui/icons";
 import { updateLocalStorageToken } from "../../boot/axios";
 
 export enum AuthStatus {
@@ -42,6 +41,12 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     },
     onError: () => {
       setStatus(AuthStatus.UNAUTHENTICATED)
+
+      toast({
+        title: 'Session expired',
+        description: 'Please login again',
+        status: 'error',
+      })
     }
   })
 
@@ -51,8 +56,6 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       toast({
         title: 'Logged in',
         status: 'success',
-        duration: 2000,
-        isClosable: true,
       })
     },
     onError: (error: any) => {
@@ -60,14 +63,16 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
         title: 'Error',
         description: error?.response?.data?.message || 'Something went wrong',
         status: 'error',
-        duration: 2000,
-        isClosable: true,
       })
     }
   })
 
   const logout = () => {
     setToken(null)
+    toast({
+      title: 'Logged out',
+      status: 'success',
+    })
   }
 
   useEffect(() => {

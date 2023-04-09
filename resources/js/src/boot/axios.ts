@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import {router} from "../router";
 
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -8,10 +10,11 @@ axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
 axios.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response.status === 401) {
+  async (error) => {
+    const { pathname } = window.location;
+    if (error.response.status === 401 && pathname !== '/auth/login') {
       updateLocalStorageToken(null)
-      window.location.href = '/auth/login';
+      await router.navigate('/auth/login');
     }
     return Promise.reject(error);
   },
