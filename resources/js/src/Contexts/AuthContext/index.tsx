@@ -3,9 +3,7 @@ import { User } from "../../Types";
 import React, { createContext, PropsWithChildren, useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { login as loginRequest, me } from "../../Services/Auth";
-import { Card, Fade, HStack, Spinner, Text, useToast, VStack } from "@chakra-ui/react";
-import LoginPage from "../../Pages/LoginPage";
-import BackgroundOverlay from "../../Components/BackgroundOverlay";
+import { useToast } from "@chakra-ui/react";
 import { LockIcon } from "@chakra-ui/icons";
 import { updateLocalStorageToken } from "../../boot/axios";
 
@@ -19,7 +17,7 @@ export enum AuthStatus {
 type AuthContextData = {
   status: AuthStatus;
   user: User | null;
-  login: (user: LoginFormValues) => void;
+  login: (values: LoginFormValues) => Promise<{ token: string }>;
   isLoggingIn: boolean;
   logout: () => void;
 }
@@ -40,6 +38,7 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     enabled: false,
     retry: false,
     onSuccess: () => {
+      console.log('onSuccess')
       setStatus(AuthStatus.AUTHENTICATED)
     },
     onError: () => {
@@ -103,31 +102,7 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       isLoggingIn,
       logout
     }}>
-      {status === AuthStatus.UNAUTHENTICATED && (
-        <LoginPage/>
-      )}
-      <Fade in={status === AuthStatus.PENDING}>
-        {status === AuthStatus.PENDING && (
-          <BackgroundOverlay>
-            <VStack as={Card} p={4} gap={1}>
-              <Spinner
-                thickness={'4px'}
-                speed={'0.65s'}
-                emptyColor={'gray.200'}
-                color={'whatsapp.500'}
-                size={'xl'}
-              />
-              <HStack>
-                <LockIcon/>
-                <Text fontSize={'sm'} fontWeight={'bold'}>
-                  Verifying credentials...
-                </Text>
-              </HStack>
-            </VStack>
-          </BackgroundOverlay>
-        )}
-      </Fade>
-      {[ AuthStatus.AUTHENTICATED ].includes(status) && children}
+      {children}
     </AuthContext.Provider>
   )
 }

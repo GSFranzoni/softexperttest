@@ -6,6 +6,16 @@ const token = localStorage.getItem('token');
 
 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response.status === 401) {
+      updateLocalStorageToken(null)
+      window.location.href = '/auth/login';
+    }
+  }
+);
+
 export const updateLocalStorageToken = (token: string | null) => {
   if (!token) {
     delete axios.defaults.headers.common['Authorization'];

@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import ProductList from "./Pages/ProductList";
 import MainLayout from "./Layouts/Main";
 import ProductCreatePage from "./Pages/ProductCreate";
@@ -9,7 +9,6 @@ import TaxCreatePage from "./Pages/TaxCreate";
 import PurchaseList from "./Pages/PurchaseList";
 import TaxView from "./Pages/TaxView";
 import LoginPage from "./Pages/LoginPage";
-import AuthProvider from "./Contexts/AuthContext";
 import HomePage from "./Pages/HomePage";
 import UserList from "./Pages/UserList";
 import UserView from "./Pages/UserView";
@@ -19,15 +18,19 @@ import { UserRole } from "./Types";
 import CartProvider from "./Contexts/CartContext";
 import TaxEditPage from "./Pages/TaxEdit";
 import PurchaseView from "./Pages/PurchaseView";
+import AuthLayout from "./Layouts/Auth";
+import AuthGuard from "./Guards/AuthGuard";
+import GuestGuard from "./Guards/GuestGuard";
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <AuthProvider>
-      <CartProvider>
-        <MainLayout/>
-      </CartProvider>
-    </AuthProvider>,
+    element:
+      <AuthGuard>
+        <CartProvider>
+          <MainLayout/>
+        </CartProvider>
+      </AuthGuard>,
     children: [
       {
         path: '',
@@ -119,7 +122,14 @@ const router = createBrowserRouter([
   },
   {
     path: '/auth',
+    element: <GuestGuard>
+      <AuthLayout/>
+    </GuestGuard>,
     children: [
+      {
+        path: '',
+        element: <Navigate to={'login'}/>
+      },
       {
         path: 'login',
         element: <LoginPage/>

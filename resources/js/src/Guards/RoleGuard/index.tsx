@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import { AuthContext } from "../Contexts/AuthContext";
-import { UserRole } from "../Types";
 import { Alert, AlertTitle } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import { Icon } from "@iconify/react";
+import { AuthContext } from "../../Contexts/AuthContext";
+import { UserRole } from "../../Types";
 
 type RoleGuardProps = {
   role: UserRole;
@@ -18,7 +18,7 @@ const RoleGuard: React.FC<RoleGuardProps> = ({ role }) => {
 
   return <Alert
     status={'error'}
-    variant={'solid'}
+    variant={'left-accent'}
     gap={2}
   >
     <Icon icon={'mdi:lock'} width={20} height={20}/>

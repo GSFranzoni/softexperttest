@@ -21,7 +21,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Icon } from "@iconify/react";
-import { Form } from "react-router-dom";
 
 export type LoginFormValues = {
   email: string;
@@ -45,11 +44,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading }) => {
       email: '',
       password: '',
       showPassword: false,
-    }
+    },
   })
   return (
     <FormProvider {...form}>
-      <Form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card boxShadow={'xl'} minWidth={'350px'} maxWidth={'100%'}>
           <CardHeader>
             <Text fontSize={'2xl'} fontWeight={'bold'}>Login</Text>
@@ -112,7 +111,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading }) => {
             </HStack>
           </CardFooter>
         </Card>
-      </Form>
+      </form>
     </FormProvider>
   )
 }
