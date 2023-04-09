@@ -34,10 +34,8 @@ const CartProvider: React.FC<{
 
   const { isOpen: showCartDrawer, onOpen: onShowCartDrawer, onClose: onHideCartDrawer } = useDisclosure();
 
-  const { data: products, isFetching } = useQuery<any>([ 'products' ], () => getProducts({}), {
-    initialData: {
-      products: [],
-    },
+  const { data: products, isFetching } = useQuery<any>([ 'products' ], getProducts, {
+    initialData: [],
     enabled: status === AuthStatus.AUTHENTICATED && user?.role === UserRole.REGULAR
   });
 
