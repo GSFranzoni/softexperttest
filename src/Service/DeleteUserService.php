@@ -34,8 +34,10 @@ class DeleteUserService
             throw new ResourceNotFoundException("User not found");
         }
 
-        if ($user->getRole() === UserRole::ADMIN) { // Todo: verify if it's necessary
-            throw new DomainException("You can't delete an admin user");
+        $admins = $this->repository->count(['role' => UserRole::ADMIN]);
+
+        if ($admins === 1 && $user->getRole() === UserRole::ADMIN) {
+            throw new DomainException("You can't delete the last admin");
         }
 
         $this->repository->delete($user);
