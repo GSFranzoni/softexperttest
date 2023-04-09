@@ -11,6 +11,7 @@ import TaxView from "./Pages/TaxView";
 import LoginPage from "./Pages/LoginPage";
 import AuthProvider from "./Contexts/AuthContext";
 import HomePage from "./Pages/HomePage";
+import UserList from "./Pages/UserList";
 
 const router = createBrowserRouter([
   {
@@ -84,7 +85,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: '',
-            element: null
+            element: <UserList/>,
           },
           {
             path: 'create',

@@ -44,13 +44,9 @@ class ProductController
      */
     public function index(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $page = (int) ($request->getQueryParams()['page'] ?? 1);
-        $limit = (int) ($request->getQueryParams()['limit'] ?? 10);
-        $products = $this->productRepository->getAll($page, $limit);
-        $total = $this->productRepository->count();
+        $products = $this->productRepository->getAll();
         $response->getBody()->write(json_encode([
-            'data' => $products,
-            'pages' => ceil($total / $limit),
+            'products' => $products,
         ]));
         return $response->withStatus(200);
     }

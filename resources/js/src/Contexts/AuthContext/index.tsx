@@ -9,7 +9,7 @@ import BackgroundOverlay from "../../Components/BackgroundOverlay";
 import { LockIcon } from "@chakra-ui/icons";
 import { updateLocalStorageToken } from "../../boot/axios";
 
-enum AuthStatus {
+export enum AuthStatus {
   IDLE,
   PENDING,
   AUTHENTICATED,

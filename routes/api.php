@@ -35,6 +35,7 @@ return function (Slim\Routing\RouteCollectorProxy $group) {
         $group->get('/{id}', [UserController::class, 'show']);
         $group->post('', [UserController::class, 'store']);
         $group->put('/{id}', [UserController::class, 'update']);
+        $group->delete('/{id}', [UserController::class, 'destroy']);
     })->add(new AuthenticateMiddleware(UserRole::ADMIN));
 
     $group->group('/auth', function (Slim\Routing\RouteCollectorProxy $group) {

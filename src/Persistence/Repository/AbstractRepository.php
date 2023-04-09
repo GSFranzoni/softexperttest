@@ -26,11 +26,19 @@ abstract class AbstractRepository
     }
 
     /**
+     * @return array
+     */
+    public function getAll(): array
+    {
+        return $this->entityManager->getRepository($this->getEntityClass())->findAll();
+    }
+
+    /**
      * @param int $page
      * @param int $limit
      * @return array
      */
-    public function getAll(int $page = 1, int $limit = 10): array
+    public function paginate(int $page = 1, int $limit = 10): array
     {
         return $this->entityManager->getRepository($this->getEntityClass())->findBy([], [], $limit, ($page - 1) * $limit);
     }

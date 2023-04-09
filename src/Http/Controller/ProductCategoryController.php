@@ -46,13 +46,9 @@ class ProductCategoryController
      */
     public function index(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $page = (int) ($request->getQueryParams()['page'] ?? 1);
-        $limit = (int) ($request->getQueryParams()['limit'] ?? 10);
-        $categories = $this->repository->getAll($page, $limit);
-        $total = $this->repository->count();
+        $categories = $this->repository->getAll();
         $response->getBody()->write(json_encode([
-            'data' => $categories,
-            'pages' => ceil($total / $limit),
+            'categories' => $categories,
         ]));
         return $response->withStatus(200);
     }

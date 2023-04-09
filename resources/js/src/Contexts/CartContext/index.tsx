@@ -1,9 +1,10 @@
-import React, { createContext, useCallback } from "react";
+import React, { createContext, useCallback, useContext } from "react";
 import { useDisclosure, useToast } from "@chakra-ui/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getProducts } from "../../Services/Products";
-import { Product, PurchasedProduct } from "../../Types";
+import { Product, PurchasedProduct, UserRole } from "../../Types";
 import { createPurchase } from "../../Services/Purchases";
+import { AuthContext, AuthStatus } from "../AuthContext";
 
 type CartContextData = {
   products: Product[];
@@ -29,12 +30,15 @@ export const CartContext = createContext<CartContextData>({} as CartContextData)
 const CartProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
+  const { user, status } = useContext(AuthContext)
+
   const { isOpen: showCartDrawer, onOpen: onShowCartDrawer, onClose: onHideCartDrawer } = useDisclosure();
 
-  const { data: { products, pages }, isFetching } = useQuery<any>([ 'products' ], () => getProducts({}), {
+  const { data: products, isFetching } = useQuery<any>([ 'products' ], () => getProducts({}), {
     initialData: {
       products: [],
-    }
+    },
+    enabled: status === AuthStatus.AUTHENTICATED && user?.role === UserRole.REGULAR
   });
 
   const [ productsInCart, setProductsInCart ] = React.useState<PurchasedProduct[]>([]);

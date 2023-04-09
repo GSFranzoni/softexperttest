@@ -52,13 +52,9 @@ class PurchaseController
      */
     public function index(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $page = (int) ($request->getQueryParams()['page'] ?? 1);
-        $limit = (int) ($request->getQueryParams()['limit'] ?? 10);
-        $purchases = $this->purchaseRepository->getAll($page, $limit);
-        $total = $this->purchaseRepository->count();
+        $purchases = $this->purchaseRepository->getAll();
         $response->getBody()->write(json_encode([
-            'data' => $purchases,
-            'pages' => ceil($total / $limit),
+            'purchases' => $purchases,
         ]));
         return $response->withStatus(200);
     }

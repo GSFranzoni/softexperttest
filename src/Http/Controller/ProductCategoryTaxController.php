@@ -39,13 +39,9 @@ class ProductCategoryTaxController
      */
     public function index(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $page = (int) ($request->getQueryParams()['page'] ?? 1);
-        $limit = (int) ($request->getQueryParams()['limit'] ?? 10);
-        $taxes = $this->repository->getAll($page, $limit);
-        $total = $this->repository->count();
+        $taxes = $this->repository->getAll();
         $response->getBody()->write(json_encode([
-            'data' => $taxes,
-            'pages' => ceil($total / $limit),
+            'taxes' => $taxes,
         ]));
         return $response->withStatus(200);
     }

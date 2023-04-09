@@ -1,20 +1,8 @@
 import axios from 'axios';
+import { Product } from "../../Types";
 
-export const getProducts = async ({
-                                    page = 1,
-                                    limit = 10,
-                                    search = '',
-                                  }) => axios.get('/products', {
-  params: {
-    page,
-    limit,
-    search,
-  }
-})
-  .then((response) => ({
-    pages: response.data.pages,
-    products: response.data.data,
-  }))
+export const getProducts = async () => axios.get<{ products: Product[] }>('/products')
+  .then((response) => response.data.products)
 
 export const createProduct = async (product: any) => axios.post('/products', {
   ...product,

@@ -1,13 +1,8 @@
 import { CreatePurchase, Purchase } from "../../Types";
 import axios from "axios";
 
-type PaginatedResponse<T> = {
-  data: T[];
-  pages: number;
-}
-
-export const getPurchases = async () => axios.get<PaginatedResponse<Purchase>>('/purchases')
-  .then((response) => response.data.data)
+export const getPurchases = async () => axios.get<{ purchases: Purchase[] }>('/purchases')
+  .then((response) => response.data.purchases)
   .catch((error) => ([]));
 
 export const createPurchase = async (purchase: CreatePurchase) => axios.post('purchases', purchase)
