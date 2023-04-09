@@ -26,7 +26,8 @@ const CategoryList = () => {
           path: '/categories',
         },
       ]}/>
-      <CategoryGrid onCategoryClick={console.log}/>
+      <CategoryGrid onCategoryClick={() => {
+      }}/>
     </VStack>
   )
 }

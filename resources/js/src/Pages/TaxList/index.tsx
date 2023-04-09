@@ -36,7 +36,6 @@ const TaxList = () => {
             navigate(`/taxes/${tax.id}/edit`)
           },
           [FormScope.DELETE]: () => {
-            console.log('delete')
           }
         }
         actions[scope.toString() as keyof typeof actions]()

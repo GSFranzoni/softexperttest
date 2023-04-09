@@ -8,9 +8,7 @@ const LoginPage = () => {
   const { login, isLoggingIn, status } = useContext(AuthContext)
   const navigate = useNavigate()
   useEffect(() => {
-    console.log('LoginPage: status', status)
     if (status === AuthStatus.AUTHENTICATED) {
-      console.log('Already logged in, redirecting to home')
       navigate('/')
     }
   }, [ status ])

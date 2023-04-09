@@ -38,7 +38,6 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     enabled: false,
     retry: false,
     onSuccess: () => {
-      console.log('onSuccess')
       setStatus(AuthStatus.AUTHENTICATED)
     },
     onError: () => {
