@@ -6,7 +6,6 @@ use App\DataTransferObject\RegisterDTO;
 use App\Exception\UserAlreadyExistsException;
 use App\Persistence\Entity\User;
 use App\Persistence\Repository\UserRepository;
-use Doctrine\ORM\Exception\ORMException;
 
 class RegisterService
 {
@@ -19,7 +18,6 @@ class RegisterService
      * @param RegisterDTO $register
      * @return void
      * @throws UserAlreadyExistsException
-     * @throws ORMException
      */
     public function execute(RegisterDTO $register): void
     {

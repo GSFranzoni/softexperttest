@@ -44,3 +44,6 @@ node: ## Start node bash
 
 exec: ## Start bash
 	docker-compose exec softexpert_server $(cmd)
+
+test: ## Run tests
+	docker-compose exec softexpert_server vendor/bin/phpunit tests --testdox --colors=always
