@@ -5,6 +5,9 @@ This project provides a RESTful API for managing products, purchases, users, and
 - MySQL
 - React with Vite and Chakra UI
 
+## Demo
+A demo of this project is available at https://ecommerce.gsfranzoni.me
+
 ## Installation
 Clone this repository to your local machine.
 
@@ -185,9 +188,6 @@ This API uses JWT (JSON Web Token) for authentication. All endpoints except for 
 - ```/users```
 - ```/auth/register```
 
-___
-## Demo
-A demo of this project is available at http://31.220.20.251:3000
 ___
 ## Default credentials
 You can use the following credentials to login:
