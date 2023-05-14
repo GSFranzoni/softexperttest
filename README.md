@@ -8,6 +8,10 @@ This project provides a RESTful API for managing products, purchases, users, and
 ## Demo
 A demo of this project is available at https://ecommerce.gsfranzoni.me
 
+You can use the following credentials to login:
+- **Email:** admin@softexpert.com
+- **Password:** admin
+
 ## Installation
 Clone this repository to your local machine.
 
@@ -187,9 +191,3 @@ This API uses JWT (JSON Web Token) for authentication. All endpoints except for 
 **Admin users** (with the **ROLE_ADMIN** role) are authorized to manage users in the following endpoints:
 - ```/users```
 - ```/auth/register```
-
-___
-## Default credentials
-You can use the following credentials to login:
-- **Email:** admin@softexpert.com
-- **Password:** admin
